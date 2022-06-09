@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: tiltakspenger-fakta-person
+  name: {{ name }}
   namespace: tpts
   labels:
     team: tpts
@@ -12,7 +12,7 @@ spec:
     min: 1
     max: 1
   ingresses:
-    - https://tiltakspenger-fakta-person.dev.intern.nav.no
+    - https://{{ name }}.dev.intern.nav.no
   liveness:
     path: /isalive
   readiness:

@@ -34,7 +34,7 @@ jobs:
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
-          arguments: test build --continue --no-daemon --no-build-cache
+          arguments: test shadowJar --continue --no-daemon --no-build-cache
 
       - name: Build and push Docker image
         if: github.ref == 'refs/heads/main'
@@ -45,14 +45,14 @@ jobs:
           docker build --tag ${docker_image} .
           docker push ${docker_image}
 
-#      - name: Notify Slack in case of build failure
-#        if: ${{ failure() && (github.ref == 'refs/heads/main') }}
-#        run: |
-#          curl -X POST --data-urlencode "payload={ \"attachments\": [{ \"pretext\": \"[tiltakspenger-fakta-person] Build failed :cry:\", \"color\": \"danger\", \"fields\": [ { \"title\": \"Author\", \"value\": \"$AUTHOR\", \"short\": false }, { \"title\": \"Commit\", \"value\": \"<https://github.com/navikt/tiltakspenger-fakta-person/commit/$GITHUB_SHA|$GITHUB_SHA>\", \"short\": false } ] }] }" $WEBHOOK_URL
-#        env:
-#          BRANCH: ${{github.ref }}
-#          AUTHOR: ${{ github.event.pusher.name }}
-#          WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+      - name: Notify Slack in case of build failure
+        if: ${{ failure() && (github.ref == 'refs/heads/main') }}
+        run: |
+          curl -X POST --data-urlencode "payload={ \"attachments\": [{ \"pretext\": \"[${{ github.event.repository.name }}] Build failed :cry:\", \"color\": \"danger\", \"fields\": [ { \"title\": \"Author\", \"value\": \"$AUTHOR\", \"short\": false }, { \"title\": \"Commit\", \"value\": \"<https://github.com/${{ github.repository }}/commit/$GITHUB_SHA|$GITHUB_SHA>\", \"short\": false } ] }] }" $WEBHOOK_URL
+        env:
+          BRANCH: ${{github.ref }}
+          AUTHOR: ${{ github.event.pusher.name }}
+          WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
 
   deploy-dev:
     name: Deploy to NAIS dev
@@ -66,4 +66,4 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais-dev.yml
-          VAR: image=${{ env.docker_image }}
+          VAR: image=${{ env.docker_image }},name=${{ github.event.repository.name }}
