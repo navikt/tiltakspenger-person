@@ -1,0 +1,23 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: tiltakspenger-fakta-person
+  namespace: tpts
+  labels:
+    team: tpts
+spec:
+  image: {{ image }}
+  port: 8080
+  replicas:
+    min: 1
+    max: 1
+  ingresses:
+    - https://tiltakspenger-fakta-person.dev.intern.nav.no
+  liveness:
+    path: /isalive
+  readiness:
+    path: /isready
+  kafka:
+    pool: nav-dev
+  secureLogs:
+    enabled: true
