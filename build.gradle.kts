@@ -5,7 +5,6 @@ plugins {
 }
 
 group = "no.nav"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
