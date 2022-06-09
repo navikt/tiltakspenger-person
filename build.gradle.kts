@@ -37,7 +37,7 @@ configurations.all {
 }
 
 application {
-    mainClass.set("no.nav.tiltakspenger.fskta.person.ApplicationKt")
+    mainClass.set("no.nav.tiltakspenger.fakta.person.ApplicationKt")
 }
 
 java {
