@@ -42,7 +42,7 @@ class PersonService(rapidsConnection: RapidsConnection):
                 }["id"]
                 .asText()
             log.info { "her skal vi gjøre et kall til pdl med fnr $fnr" }
-            val løsning =  """{"person": {"navn" : "Kåre Kropp"}}"""
+            val løsning =  mapOf("person" to mapOf("navn" to "Kåre Kropp"))
 
             packet["@løsning"] = løsning
             log.info { "Løst behov for behov $behovId" }
