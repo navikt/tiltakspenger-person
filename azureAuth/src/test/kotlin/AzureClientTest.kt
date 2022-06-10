@@ -23,7 +23,11 @@ class AzureClientTest {
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )
                 tokenEndpoint -> respond(
-                    content = """{ "access_token": "$accessToken", "token_type": "access_token", "ext_expires_in": "1", "expires_in": "1" }""",
+                    content = """{ 
+                        |"access_token": "$accessToken", 
+                        |"token_type": "access_token", 
+                        |"ext_expires_in": "1", 
+                        |"expires_in": "1" }""".trimMargin(),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )
