@@ -1,7 +1,6 @@
 package no.nav.tiltakspenger.fakta.person
 
 internal object Configuration {
-
     private val defaultProperties =
         mapOf(
             "RAPID_APP_NAME" to "tiltakspenger-fakta-person",
