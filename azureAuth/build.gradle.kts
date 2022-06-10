@@ -1,0 +1,17 @@
+val ktorVersion = "2.0.2"
+
+plugins {
+    kotlin("plugin.serialization") version "1.6.21"
+}
+
+dependencies {
+    implementation("io.ktor:ktor-client-auth:$ktorVersion")
+    implementation("io.ktor:ktor-client-core:$ktorVersion")
+    implementation("io.ktor:ktor-client-cio:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.7.0")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
+}
