@@ -15,6 +15,15 @@ class PersonService(rapidsConnection: RapidsConnection) :
                 it.demandAllOrAny("@behov", listOf("person"))
                 it.forbid("@løsning")
                 it.requireKey("@id", "@behovId")
+                it.requireArray("identer") {
+                    requireKey("type", "historisk", "id")
+                }
+                it.require("identer") { identer ->
+                    if (!identer.any { ident ->
+                        ident["type"].asText() == "fnr"
+                    }
+                    ) throw IllegalArgumentException("Mangler fnr i identer")
+                }
             }
         }.register(this)
     }
