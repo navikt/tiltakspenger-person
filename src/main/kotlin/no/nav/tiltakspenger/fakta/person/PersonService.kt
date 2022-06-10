@@ -45,6 +45,7 @@ class PersonService(rapidsConnection: RapidsConnection) :
 
             packet["@løsning"] = løsning
             log.info { "Løst behov for behov $behovId" }
+            log.info { "Vi skal sende ${packet.toJson()}" }
             context.publish(packet.toJson())
         }
     }
