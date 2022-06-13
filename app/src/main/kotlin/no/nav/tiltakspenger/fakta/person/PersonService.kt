@@ -1,11 +1,14 @@
 package no.nav.tiltakspenger.fakta.person
 
+import kotlinx.coroutines.*
 import mu.KotlinLogging
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.withMDC
+import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
+import kotlin.coroutines.CoroutineContext
 
 private val log = KotlinLogging.logger {}
 class PersonService(rapidsConnection: RapidsConnection):
@@ -42,8 +45,18 @@ class PersonService(rapidsConnection: RapidsConnection):
                 }["id"]
                 .asText()
             log.info { "her skal vi gjøre et kall til pdl med fnr $fnr" }
-            val løsning =  mapOf("person" to mapOf("navn" to "Kåre Kropp"))
 
+            // Consider not using runBlocking
+            val response = runBlocking {
+                PDLClient.hentPerson(fnr)
+            }
+
+            if (response.errors.isNullOrEmpty()) {
+                log.error { response.errors }
+                return@withMDC
+            }
+
+            val løsning =  mapOf("person" to mapOf("navn" to "Kåre Kropp"))
             packet["@løsning"] = løsning
             log.info { "Løst behov for behov $behovId" }
             log.info { "Vi skal sende ${packet.toJson()}" }
