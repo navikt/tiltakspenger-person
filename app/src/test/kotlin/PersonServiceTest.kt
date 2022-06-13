@@ -48,7 +48,13 @@ class PersonServiceTest {
         val ident = "121212132323"
         // language=JSON
         rapid.sendTestMessage("""
-            { "@behov": ["person"], "identer": [{"id":"$ident","type":"fnr","historisk":false}], "@id": "1", "@behovId": "2", "@løsning": "hei" }
+            { 
+                "@behov": ["person"], 
+                "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
+                "@id": "1", 
+                "@behovId": "2", 
+                "@løsning": "hei"
+            }
         """.trimIndent())
         coVerify { PDLClient.hentPerson(any()) wasNot Called }
     }

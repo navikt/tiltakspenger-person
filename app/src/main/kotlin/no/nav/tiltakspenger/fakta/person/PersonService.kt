@@ -8,7 +8,6 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.withMDC
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
-import kotlin.coroutines.CoroutineContext
 
 private val log = KotlinLogging.logger {}
 class PersonService(rapidsConnection: RapidsConnection):
