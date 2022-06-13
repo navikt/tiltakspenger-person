@@ -4,6 +4,8 @@ import no.nav.tiltakspenger.fakta.person.PersonService
 import no.nav.tiltakspenger.fakta.person.pdl.HentPersonResponse
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.Person
+import no.nav.tiltakspenger.fakta.person.pdl.query
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -41,6 +43,11 @@ class PersonServiceTest {
         JSONAssert.assertEquals("""
             {"@løsning": {"person": {"navn": "Kåre Kropp"} } }
         """.trimIndent(), rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT)
+    }
+
+    @Test
+    fun `should be able to read query-file`() {
+        assertTrue(query.isNotEmpty())
     }
 
     @Test
