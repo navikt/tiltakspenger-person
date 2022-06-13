@@ -1,7 +1,9 @@
 import io.mockk.*
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
+import no.nav.tiltakspenger.fakta.person.pdl.HentPersonResponse
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
+import no.nav.tiltakspenger.fakta.person.pdl.Person
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -14,7 +16,10 @@ class PersonServiceTest {
 
     init {
         mockkObject(PDLClient).also {
-            coEvery { PDLClient.hentPerson(any()) } returns mockk()
+            coEvery { PDLClient.hentPerson(any()) } returns HentPersonResponse(
+                data = mockk(),
+                errors = emptyList()
+            )
         }
     }
 

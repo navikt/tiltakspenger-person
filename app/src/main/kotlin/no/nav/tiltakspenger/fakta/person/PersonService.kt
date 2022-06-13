@@ -51,7 +51,7 @@ class PersonService(rapidsConnection: RapidsConnection):
                 PDLClient.hentPerson(fnr)
             }
 
-            if (response.errors.isNullOrEmpty()) {
+            if (!response.errors.isNullOrEmpty()) {
                 log.error { response.errors }
                 return@withMDC
             }
