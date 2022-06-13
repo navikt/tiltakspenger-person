@@ -26,6 +26,7 @@ java {
 }
 
 detekt {
+    autocorrect = true
     buildUponDefaultConfig = true
     allRules = false
     config = files("$projectDir/config/detekt.yml")
