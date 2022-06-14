@@ -21,6 +21,6 @@ data class Person(
 
 @Serializable
 data class HentPersonResponse(
-    val data: Person,
+    val data: Person?,
     val errors: List<PdlError>? = null
 )
