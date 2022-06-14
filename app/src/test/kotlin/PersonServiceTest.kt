@@ -1,4 +1,5 @@
 import io.mockk.*
+import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
 import no.nav.tiltakspenger.fakta.person.pdl.HentPersonResponse
@@ -11,22 +12,23 @@ import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 
 class PersonServiceTest {
-    val rapid = TestRapid()
-    val personService = PersonService(
-        rapidsConnection = rapid
-    )
-
-    init {
-        mockkObject(PDLClient).also {
-            coEvery { PDLClient.hentPerson(any()) } returns HentPersonResponse(
-                data = mockk(),
-                errors = emptyList()
-            )
-        }
+    private fun mockRapid(): Triple<TestRapid, PersonService, PDLClient> {
+        val rapid = TestRapid()
+        val pdlClient = mockk<PDLClient>()
+        val personService = PersonService(
+            rapidsConnection = rapid,
+            pdlClient = pdlClient
+        )
+        coEvery { pdlClient.hentPerson(any()) } returns HentPersonResponse(
+            data = mockk(),
+            errors = emptyList()
+        )
+        return Triple(rapid, personService, pdlClient)
     }
 
     @Test
     fun `skal svare på person-behov`() {
+        val (rapid, _, pdlClient) = mockRapid()
         val ident = "121212132323"
         // language=JSON
         rapid.sendTestMessage("""
@@ -37,7 +39,7 @@ class PersonServiceTest {
               "@behovId": "2"
             }
         """.trimIndent())
-        coVerify { PDLClient.hentPerson(ident) }
+        coVerify { pdlClient.hentPerson(ident) }
 
         // language=JSON
         JSONAssert.assertEquals("""
@@ -52,6 +54,7 @@ class PersonServiceTest {
 
     @Test
     fun `skal ikke svare på person-behov som er løst`() {
+        val (rapid, _, pdlClient) = mockRapid()
         val ident = "121212132323"
         // language=JSON
         rapid.sendTestMessage("""
@@ -63,6 +66,6 @@ class PersonServiceTest {
                 "@løsning": "hei"
             }
         """.trimIndent())
-        coVerify { PDLClient.hentPerson(any()) wasNot Called }
+        coVerify { pdlClient.hentPerson(any()) wasNot Called }
     }
 }

@@ -10,8 +10,9 @@ import no.nav.helse.rapids_rivers.withMDC
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 
 private val log = KotlinLogging.logger {}
-class PersonService(rapidsConnection: RapidsConnection):
+class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()):
     River.PacketListener {
+
     init {
         River(rapidsConnection).apply {
             validate {
@@ -47,7 +48,7 @@ class PersonService(rapidsConnection: RapidsConnection):
 
             // Consider not using runBlocking
             val response = runBlocking {
-                PDLClient.hentPerson(fnr)
+                pdlClient.hentPerson(fnr)
             }
 
             if (!response.errors.isNullOrEmpty()) {

@@ -1,5 +1,6 @@
 package no.nav.tiltakspenger.fakta.person.pdl
 
+import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -10,25 +11,19 @@ import no.nav.tiltakspenger.azureAuth.OauthConfig
 import no.nav.tiltakspenger.fakta.person.Configuration
 
 val url = getPDLUrl()
-val client = azureClient(
+
+class PDLClient(val client: HttpClient = azureClient(
     OauthConfig.fromEnv(
         scope = Configuration.getPdlScope(),
     )
-)
-
-object PDLClient {
+)) {
     suspend fun hentPerson(ident: String): HentPersonResponse {
         val res: HentPersonResponse = client.post(url) {
-            setBody(hentPersonQuery(ident))
+            accept(ContentType.Application.Json)
             contentType(ContentType.Application.Json)
+            setBody(hentPersonQuery(ident))
         }.body()
         return res
     }
 }
-
-@Serializable
-data class GraphqlQuery(
-    val query: String,
-    val variables: Map<String, String>
-)
 

@@ -24,6 +24,8 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
     implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-mock:$ktorVersion")
+    testImplementation("io.ktor:ktor-client-mock-jvm:$ktorVersion")
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:$kotlinxSerializationVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:$kotlinxSerializationVersion")

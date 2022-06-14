@@ -1,0 +1,69 @@
+{
+  "data": {
+    "hentPerson": {
+      "navn": [
+        {
+          "fornavn": "TRIVIELL",
+          "mellomnavn": null,
+          "etternavn": "SKILPADDE",
+          "forkortetNavn": "SKILPADDE TRIVIELL",
+          "originaltNavn": null,
+          "gyldigFraOgMed": "2021-06-24",
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2021-06-24T09:33:27",
+            "gyldighetstidspunkt": "2021-06-24T09:33:27",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2021-06-24T09:33:27",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "1f643eba-82e3-4128-81b7-b06eb944f15d",
+            "historisk": false
+          }
+        }
+      ],
+      "foedsel": [
+        {
+          "foedselsaar": 1987,
+          "foedselsdato": "1987-07-30",
+          "foedeland": "FJI",
+          "foedested": "Fødested i/på FIJI",
+          "foedekommune": null,
+          "folkeregistermetadata": {
+            "aarsak": null,
+            "ajourholdstidspunkt": "2021-06-24T09:33:27",
+            "gyldighetstidspunkt": "2021-06-24T09:33:27",
+            "kilde": "Dolly",
+            "opphoerstidspunkt": null,
+            "sekvens": null
+          },
+          "metadata": {
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2021-06-24T09:33:27",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ],
+            "master": "FREG",
+            "opplysningsId": "6a9e00f2-f7f4-4b14-a3c8-3df3a1f1949b",
+            "historisk": false
+          }
+        }
+      ]
+    }
+  }
+}

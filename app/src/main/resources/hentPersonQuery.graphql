@@ -4,6 +4,40 @@ query($ident: ID!){
             fornavn
             mellomnavn
             etternavn
+            folkeregistermetadata {
+                ...folkeregistermetadataDetails
+            }
+            metadata {
+                ...metadataDetails
+            }
         }
+        foedsel {
+            foedselsdato
+            folkeregistermetadata {
+                ...folkeregistermetadataDetails
+            }
+            metadata {
+                ...metadataDetails
+            }
+        }
+}
+
+fragment folkeregistermetadataDetails on Folkeregistermetadata {
+    aarsak
+    ajourholdstidspunkt
+    gyldighetstidspunkt
+    kilde
+    opphoerstidspunkt
+    sekvens
+}
+
+fragment metadataDetails on Metadata {
+    endringer {
+        kilde
+        registrert
+        registrertAv
+        systemkilde
+        type
     }
+    master
 }
