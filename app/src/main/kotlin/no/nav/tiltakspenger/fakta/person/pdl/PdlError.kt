@@ -18,6 +18,5 @@ data class PdlErrorLocation(
 
 @Serializable
 data class PdlErrorExtension(
-    val code: String?,
     val classification: String
 )
