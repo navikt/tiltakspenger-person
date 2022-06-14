@@ -8,7 +8,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/.idea/.gitignore">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/.idea/sonarIssues.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/.nais/nais-dev.yml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/Dockerfile">
           <value>
             <set />
           </value>
@@ -23,7 +38,37 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/Application.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/Configuration.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/PersonService.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/Fødsel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/HentPersonQuery.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/HentPersonResponse.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/Navn.java">
           <value>
             <set />
           </value>
@@ -43,7 +88,77 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/common.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/FolkeregisterMetadata.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/FregMetadata.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/Fødsel.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/Metadata.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/Navn.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/pdl/models/Person.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/seralizers/LocalDateSerializer.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/main/kotlin/no/nav/tiltakspenger/fakta/person/seralizers/LocalDateTimeSerializer.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/app/src/main/resources/hentPersonQuery.graphql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/test/kotlin/FaktaPersonTest.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/test/kotlin/PDLClientTest.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/test/kotlin/PersonServiceTest.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/test/resources/pdlErrorResponse.json">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/app/src/test/resources/pdlResponse.json">
           <value>
             <set />
           </value>
@@ -84,6 +199,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/azureAuth/src/main/kotlin/no.nav.tiltakspenger.azureAuth/AzureTokenProvider.kt">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/azureAuth/src/main/kotlin/no.nav.tiltakspenger.azureAuth/OAuth2AccessTokenResponse.kt">
           <value>
             <set />
           </value>
@@ -164,31 +284,6 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/kotlin/no/nav/tiltakspenger/fakta/person/oauth/TokenCache.kt">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/../tiltakspenger-vedtak/app/build.gradle.kts">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/../tiltakspenger-vedtak/app/src/main/kotlin/no/nav/tiltakspenger/vedtak/routes/sak/SakRoutes.kt">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/../tpts-mottak/.nais/nais-dev.yml">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="$PROJECT_DIR$/../tpts-mottak/build.gradle.kts">
-          <value>
-            <set />
-          </value>
-        </entry>
-        <entry key="/a.dummy">
           <value>
             <set />
           </value>
