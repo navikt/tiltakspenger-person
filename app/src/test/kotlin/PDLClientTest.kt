@@ -33,4 +33,15 @@ class PDLClientTest {
             pdlClient.hentPerson("test")
         }
     }
+
+    @Test
+    fun `should be able to serialize errors`() {
+        // language=JSON
+        val response = this::class.java.getResource("pdlErrorResponse.json").readText()
+        val pdlClient = PDLClient(mockClient(response))
+
+        runBlocking {
+            pdlClient.hentPerson("test")
+        }
+    }
 }

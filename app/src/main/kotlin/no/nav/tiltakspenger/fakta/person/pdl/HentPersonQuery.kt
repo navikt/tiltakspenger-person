@@ -34,6 +34,6 @@ data class HentPersonRepsonse(
 
 @Serializable
 data class HentPersonResponse(
-    val data: HentPersonRepsonse?,
+    val data: HentPersonRepsonse? = null,
     val errors: List<PdlError>? = null
 )

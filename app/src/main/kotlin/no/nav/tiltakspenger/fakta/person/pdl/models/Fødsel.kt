@@ -26,4 +26,3 @@ fun getEndringstidspunktOrNull(fødsel: Fødsel): LocalDateTime? =
         fødsel.metadata.master.isFreg() -> fødsel.folkeregistermetadata.ajourholdstidspunkt
         else -> fødsel.metadata.endringer.nyeste()?.registrert
     }
-

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class PdlError(
     val message: String,
     val locations: List<PdlErrorLocation>,
-    val path: List<String>?,
+    val path: List<String>? = null,
     val extensions: PdlErrorExtension
 )
 
@@ -18,5 +18,6 @@ data class PdlErrorLocation(
 
 @Serializable
 data class PdlErrorExtension(
+    val code: String? = null,
     val classification: String
 )
