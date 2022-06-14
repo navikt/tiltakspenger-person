@@ -48,11 +48,15 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
 
             // Consider not using runBlocking
             val response = runBlocking {
-                pdlClient.hentPerson(fnr)
+                kotlin.runCatching {
+                    pdlClient.hentPerson(fnr)
+                }
             }
+                .onFailure { log.error { it } }
+                .getOrNull()
 
-            if (!response.errors.isNullOrEmpty()) {
-                log.error { response.errors }
+            if (!response?.errors.isNullOrEmpty()) {
+                log.error { response?.errors }
                 return@withMDC
             }
 

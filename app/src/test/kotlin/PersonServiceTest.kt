@@ -4,7 +4,6 @@ import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
 import no.nav.tiltakspenger.fakta.person.pdl.HentPersonResponse
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
-import no.nav.tiltakspenger.fakta.person.pdl.Person
 import no.nav.tiltakspenger.fakta.person.pdl.query
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
