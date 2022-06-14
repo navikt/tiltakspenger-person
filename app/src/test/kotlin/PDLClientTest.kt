@@ -13,7 +13,6 @@ class PDLClientTest {
     private fun mockClient(response: String): HttpClient {
         val mockEngine = MockEngine() {
             respond(
-                // language=JSON
                 content = response,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             )
@@ -25,7 +24,6 @@ class PDLClientTest {
 
     @Test
     fun `should be able to serialize non-errors`() {
-        // language=JSON
         val response = this::class.java.getResource("pdlResponse.json").readText()
         val pdlClient = PDLClient(mockClient(response))
 
@@ -36,7 +34,6 @@ class PDLClientTest {
 
     @Test
     fun `should be able to serialize errors`() {
-        // language=JSON
         val response = this::class.java.getResource("pdlErrorResponse.json").readText()
         val pdlClient = PDLClient(mockClient(response))
 
