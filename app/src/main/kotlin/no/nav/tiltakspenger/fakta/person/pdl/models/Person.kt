@@ -1,9 +1,15 @@
 package no.nav.tiltakspenger.fakta.person.pdl.models
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 data class Person(
-    val navn: List<Navn>,
-    val foedsel: List<Fødsel>
-)
+    val fødsel: Fødsel?,
+    val navn: Navn
+) {
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "fødselsdato" to this.fødsel?.foedselsdato,
+            "fornavn" to this.navn.fornavn,
+            "etternavn" to this.navn.etternavn,
+            "mellomnavn" to this.navn.mellomnavn,
+        )
+    }
+}

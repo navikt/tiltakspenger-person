@@ -8,6 +8,7 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.helse.rapids_rivers.withMDC
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
+import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 
 private val log = KotlinLogging.logger {}
 class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()):
@@ -47,24 +48,25 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
             log.info { "her skal vi gjøre et kall til pdl med fnr $fnr" }
 
             // Consider not using runBlocking
-            val response = runBlocking {
-                kotlin.runCatching {
+            runBlocking {
                     pdlClient.hentPerson(fnr)
+            }
+                .mapLeft(::håndterFeil)
+                .map {
+                    val løsning = it.toMap()
+                    packet["@løsning"] = løsning
+                    log.info { "Løst behov for behov $behovId" }
+                    log.info { "Vi skal sende ${packet.toJson()}" }
+                    context.publish(packet.toJson())
                 }
-            }
-                .onFailure { log.error { it } }
-                .getOrNull()
 
-            if (!response?.errors.isNullOrEmpty()) {
-                log.error { response?.errors }
-                return@withMDC
-            }
+        }
+    }
 
-            val løsning =  mapOf("person" to mapOf("navn" to "Kåre Kropp"))
-            packet["@løsning"] = løsning
-            log.info { "Løst behov for behov $behovId" }
-            log.info { "Vi skal sende ${packet.toJson()}" }
-            context.publish(packet.toJson())
+    fun håndterFeil(clientError: PDLClientError) {
+        when (clientError) {
+            is PDLClientError.FantIkkePerson -> log.error { "Fant ikke person" }
+            is PDLClientError.UkjentFeil -> log.error { clientError.errors }
         }
     }
 }
