@@ -29,7 +29,7 @@ data class Person(
 
 @Serializable
 data class HentPersonRepsonse(
-    val hentPerson: Person
+    val hentPerson: Person?
 )
 
 @Serializable
