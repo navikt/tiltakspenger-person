@@ -67,6 +67,8 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
         when (clientError) {
             is PDLClientError.FantIkkePerson -> log.error { "Fant ikke person" }
             is PDLClientError.UkjentFeil -> log.error { clientError.errors }
+            is PDLClientError.NavnKunneIkkeAvklares -> log.error { "Navn kunne ikke avklares" }
+            is PDLClientError.NetworkError -> log.error { clientError.exception }
         }
     }
 }
