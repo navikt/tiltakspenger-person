@@ -49,7 +49,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
 
             // Consider not using runBlocking
             runBlocking {
-                    pdlClient.hentPerson(fnr)
+                pdlClient.hentPerson(fnr)
             }
                 .mapLeft(::håndterFeil)
                 .map {
@@ -65,10 +65,11 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
 
     fun håndterFeil(clientError: PDLClientError) {
         when (clientError) {
-            is PDLClientError.FantIkkePerson -> log.error { "Fant ikke person" }
+            PDLClientError.FantIkkePerson -> log.error { "Fant ikke person" }
             is PDLClientError.UkjentFeil -> log.error { clientError.errors }
-            is PDLClientError.NavnKunneIkkeAvklares -> log.error { "Navn kunne ikke avklares" }
+            PDLClientError.NavnKunneIkkeAvklares -> log.error { "Navn kunne ikke avklares" }
             is PDLClientError.NetworkError -> log.error { clientError.exception }
+            PDLClientError.IngenNavnFunnet -> log.error { "Fant ingen navn i PDL" }
         }
     }
 }

@@ -19,16 +19,19 @@ const val INDIVIDSTONAD = "IND"
 
 sealed class PDLClientError {
     object FantIkkePerson : PDLClientError()
-    object NavnKunneIkkeAvklares: PDLClientError()
-    data class NetworkError(val exception: Throwable): PDLClientError()
-    data class UkjentFeil(val errors: List<PdlError>): PDLClientError()
+    object IngenNavnFunnet : PDLClientError()
+    object NavnKunneIkkeAvklares : PDLClientError()
+    data class NetworkError(val exception: Throwable) : PDLClientError()
+    data class UkjentFeil(val errors: List<PdlError>) : PDLClientError()
 }
 
-class PDLClient(val client: HttpClient = azureClient(
-    OauthConfig.fromEnv(
-        scope = Configuration.getPdlScope(),
+class PDLClient(
+    val client: HttpClient = azureClient(
+        OauthConfig.fromEnv(
+            scope = Configuration.getPdlScope(),
+        )
     )
-)) {
+) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         kotlin.runCatching {
             return@runCatching client.post(url) {
@@ -55,4 +58,3 @@ class PDLClient(val client: HttpClient = azureClient(
         }
     }
 }
-

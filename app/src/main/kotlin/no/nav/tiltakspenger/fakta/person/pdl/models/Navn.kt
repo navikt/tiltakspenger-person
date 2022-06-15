@@ -1,4 +1,4 @@
-package no.nav.tiltakspenger.fakta.person.pdl.models;
+package no.nav.tiltakspenger.fakta.person.pdl.models
 
 import arrow.core.Either
 import arrow.core.left
@@ -15,17 +15,14 @@ data class Navn(
     val mellomnavn: String? = null,
     override val metadata: EndringsMetadata,
     override val folkeregistermetadata: FolkeregisterMetadata
-): Changeable
+) : Changeable
 
-fun avklarNavn(navn: List<Navn>): Either<PDLClientError.NavnKunneIkkeAvklares, Navn> {
-    if (navn.isEmpty()) return PDLClientError.NavnKunneIkkeAvklares.left()
+fun avklarNavn(navn: List<Navn>): Either<PDLClientError, Navn> {
+    if (navn.isEmpty()) return PDLClientError.IngenNavnFunnet.left()
     return navn
         .sortedByDescending { getEndringstidspunktOrNull(it) }
-        .firstOrNull()
-        ?.let {
-            if (kildeErUdokumentert(it.metadata)) it.right()
-            else null
-        } ?: PDLClientError.NavnKunneIkkeAvklares.left()
+        .firstOrNull { !kildeErUdokumentert(it.metadata) }?.right()
+        ?: PDLClientError.NavnKunneIkkeAvklares.left()
 }
 
 fun kildeErUdokumentert(metadata: EndringsMetadata) =

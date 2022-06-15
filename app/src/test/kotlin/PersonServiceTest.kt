@@ -1,12 +1,9 @@
 import arrow.core.right
 import io.mockk.*
-import kotlinx.serialization.Serializable
-import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
 import no.nav.tiltakspenger.fakta.person.pdl.*
 import no.nav.tiltakspenger.fakta.person.pdl.models.*
-import no.nav.tiltakspenger.fakta.person.seralizers.LocalDateTimeSerializer
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -49,9 +46,7 @@ class PersonServiceTest {
                     sekvens = 1,
                 ),
                 metadata = EndringsMetadata(
-                    endringer = listOf(
-
-                    ),
+                    endringer = listOf(),
                     master = Kilde.FREG
                 )
             ),
@@ -78,20 +73,25 @@ class PersonServiceTest {
         val (rapid, _, pdlClient) = mockRapid()
         val ident = "121212132323"
         // language=JSON
-        rapid.sendTestMessage("""
+        rapid.sendTestMessage(
+            """
             { 
               "@behov": ["person"], 
               "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
               "@id": "1", 
               "@behovId": "2"
             }
-        """.trimIndent())
+            """.trimIndent()
+        )
         coVerify { pdlClient.hentPerson(ident) }
 
         // language=JSON
-        JSONAssert.assertEquals("""
+        JSONAssert.assertEquals(
+            """
             {"@løsning": {"fornavn": "test", "etternavn":  "testesen", "mellomnavn": null, "fødselsdato": "2020-04-10" } }
-        """.trimIndent(), rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT)
+            """.trimIndent(),
+            rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT
+        )
     }
 
     @Test
@@ -104,7 +104,8 @@ class PersonServiceTest {
         val (rapid, _, pdlClient) = mockRapid()
         val ident = "121212132323"
         // language=JSON
-        rapid.sendTestMessage("""
+        rapid.sendTestMessage(
+            """
             { 
                 "@behov": ["person"], 
                 "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
@@ -112,7 +113,8 @@ class PersonServiceTest {
                 "@behovId": "2", 
                 "@løsning": "hei"
             }
-        """.trimIndent())
+            """.trimIndent()
+        )
         coVerify { pdlClient.hentPerson(any()) wasNot Called }
     }
 }
@@ -129,4 +131,3 @@ fun Int.september(year: Int): LocalDate = LocalDate.of(year, Month.SEPTEMBER, th
 fun Int.oktober(year: Int): LocalDate = LocalDate.of(year, Month.OCTOBER, this)
 fun Int.november(year: Int): LocalDate = LocalDate.of(year, Month.NOVEMBER, this)
 fun Int.desember(year: Int): LocalDate = LocalDate.of(year, Month.DECEMBER, this)
-
