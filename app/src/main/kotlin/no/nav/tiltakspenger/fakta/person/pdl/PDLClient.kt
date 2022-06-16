@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.SerializationException
 import no.nav.tiltakspenger.fakta.person.Configuration.getPDLUrl
 import no.nav.tiltakspenger.azureAuth.azureClient
 import no.nav.tiltakspenger.azureAuth.OauthConfig
@@ -21,8 +22,15 @@ sealed class PDLClientError {
     object FantIkkePerson : PDLClientError()
     object IngenNavnFunnet : PDLClientError()
     object NavnKunneIkkeAvklares : PDLClientError()
+    object ResponsManglerPerson: PDLClientError()
     data class NetworkError(val exception: Throwable) : PDLClientError()
+    data class SerializationException(val exception: Throwable) : PDLClientError()
     data class UkjentFeil(val errors: List<PdlError>) : PDLClientError()
+}
+
+fun Throwable.toPdlClientError() = when (this) {
+    is SerializationException -> PDLClientError.SerializationException(this)
+    else -> PDLClientError.NetworkError(this)
 }
 
 class PDLClient(
@@ -33,8 +41,8 @@ class PDLClient(
     )
 ) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
-        kotlin.runCatching {
-            return@runCatching client.post(url) {
+        return kotlin.runCatching {
+            client.post(url) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
                 contentType(ContentType.Application.Json)
@@ -42,15 +50,15 @@ class PDLClient(
             }.body<HentPersonResponse>()
         }
             .fold(
-                { return it.right() },
-                { return PDLClientError.NetworkError(it).left() },
+                { it.right() },
+                { it.toPdlClientError().left() }
             )
     }
 
     suspend fun hentPerson(ident: String): Either<PDLClientError, Person> {
         return either {
             val response = fetchPerson(ident).bind()
-            val person = response.getPerson().bind()
+            val person = response.extractPerson().bind()
             Person(
                 fødsel = avklarFødsel(person.foedsel),
                 navn = avklarNavn(person.navn).bind()

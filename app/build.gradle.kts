@@ -2,6 +2,7 @@ val javaVersion = JavaVersion.VERSION_17
 val ktorVersion = "2.0.2"
 val kotlinxSerializationVersion = "1.3.3"
 val graphqlKotlinVersion = "5.3.1"
+val kotestVersion = "5.3.0"
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -32,6 +33,10 @@ dependencies {
     // Arrow
     implementation("io.arrow-kt:arrow-core:1.1.2")
 
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
+    testImplementation("io.kotest.extensions:kotest-assertions-arrow:1.2.5")
+    testImplementation("io.kotest:kotest-extensions:$kotestVersion")
     testImplementation(platform("org.junit:junit-bom:5.8.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("io.mockk:mockk:1.12.4")

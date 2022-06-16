@@ -63,6 +63,23 @@
             "historisk": false
           }
         }
+      ],
+      "adressebeskyttelse": [
+        {
+          "gradering": "STRENGT_FORTROLIG",
+          "metadata": {
+            "master": "PDL",
+            "endringer": [
+              {
+                "kilde": "Dolly",
+                "registrert": "2021-06-24T09:33:27",
+                "registrertAv": "Folkeregisteret",
+                "systemkilde": "FREG",
+                "type": "OPPRETT"
+              }
+            ]
+          }
+        }
       ]
     }
   }

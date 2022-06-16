@@ -16,11 +16,11 @@ data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
     val errors: List<PdlError>? = null
 ) {
-    fun getPerson(): Either<PDLClientError, PdlPerson> {
+    fun extractPerson(): Either<PDLClientError, PdlPerson> {
         if (this.errors != null && this.errors.isNotEmpty()) {
             return PDLClientError.UkjentFeil(this.errors).left()
         }
         return this.data?.hentPerson?.right()
-            ?: PDLClientError.UkjentFeil(emptyList()).left()
+            ?: PDLClientError.ResponsManglerPerson.left()
     }
 }
