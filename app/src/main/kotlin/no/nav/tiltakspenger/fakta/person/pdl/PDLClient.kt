@@ -21,6 +21,7 @@ import no.nav.tiltakspenger.fakta.person.Configuration
 import no.nav.tiltakspenger.fakta.person.Configuration.getPDLUrl
 import no.nav.tiltakspenger.fakta.person.pdl.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.models.avklarFødsel
+import no.nav.tiltakspenger.fakta.person.pdl.models.avklarGradering
 import no.nav.tiltakspenger.fakta.person.pdl.models.avklarNavn
 
 val url = getPDLUrl()
@@ -28,7 +29,9 @@ const val INDIVIDSTONAD = "IND"
 
 sealed class PDLClientError {
     object IngenNavnFunnet : PDLClientError()
+    object IngenGraderingFunnet : PDLClientError()
     object NavnKunneIkkeAvklares : PDLClientError()
+    object GraderingKunneIkkeAvklares : PDLClientError()
     object ResponsManglerPerson : PDLClientError()
     data class NetworkError(val exception: Throwable) : PDLClientError()
     data class SerializationException(val exception: Throwable) : PDLClientError()
@@ -47,7 +50,7 @@ class PDLClient(
         ),
     ) {
         install(HttpRequestRetry) {
-            retryOnExceptionIf { request, cause ->
+            retryOnExceptionIf { _, cause ->
                 cause is IOException
             }
             exponentialDelay()
@@ -76,6 +79,7 @@ class PDLClient(
             Person(
                 fødsel = avklarFødsel(person.foedsel),
                 navn = avklarNavn(person.navn).bind(),
+                adressebeskyttelse = avklarGradering(person.adressebeskyttelse).bind()
             )
         }
     }

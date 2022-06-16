@@ -11,7 +11,7 @@ data class FolkeregisterMetadata(
     val ajourholdstidspunkt: LocalDateTime?,
     @Serializable(with = LocalDateTimeSerializer::class)
     val gyldighetstidspunkt: LocalDateTime?,
-    val kilde: String,
+    val kilde: String?,
     @Serializable(with = LocalDateTimeSerializer::class)
     val opphoerstidspunkt: LocalDateTime?,
     val sekvens: Int?

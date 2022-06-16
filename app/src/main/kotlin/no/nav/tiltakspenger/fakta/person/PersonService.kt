@@ -1,6 +1,6 @@
 package no.nav.tiltakspenger.fakta.person
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
@@ -71,6 +71,8 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
             PDLClientError.IngenNavnFunnet -> log.error { "Fant ingen navn i PDL" }
             PDLClientError.ResponsManglerPerson -> log.error { "Respons fra PDL inneholdt ikke person" }
             is PDLClientError.SerializationException -> log.error { "Bad message" }
+            PDLClientError.GraderingKunneIkkeAvklares -> log.error { "Kunne ikke avklare gradering" }
+            PDLClientError.IngenGraderingFunnet -> log.error { "Fant ingen gradering" }
         }
     }
 }

@@ -1,9 +1,22 @@
+
 import arrow.core.right
-import io.mockk.*
+import io.mockk.Called
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
-import no.nav.tiltakspenger.fakta.person.pdl.*
-import no.nav.tiltakspenger.fakta.person.pdl.models.*
+import no.nav.tiltakspenger.fakta.person.pdl.Endring
+import no.nav.tiltakspenger.fakta.person.pdl.EndringsMetadata
+import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
+import no.nav.tiltakspenger.fakta.person.pdl.models.Adressebeskyttelse
+import no.nav.tiltakspenger.fakta.person.pdl.models.AdressebeskyttelseGradering
+import no.nav.tiltakspenger.fakta.person.pdl.models.FolkeregisterMetadata
+import no.nav.tiltakspenger.fakta.person.pdl.models.Fødsel
+import no.nav.tiltakspenger.fakta.person.pdl.models.Kilde
+import no.nav.tiltakspenger.fakta.person.pdl.models.Navn
+import no.nav.tiltakspenger.fakta.person.pdl.models.Person
+import no.nav.tiltakspenger.fakta.person.pdl.query
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
@@ -55,6 +68,21 @@ class PersonServiceTest {
                 etternavn = "testesen",
                 metadata = metadata,
                 folkeregistermetadata = folkeregisterMetadata
+            ),
+            adressebeskyttelse = Adressebeskyttelse(
+                gradering = AdressebeskyttelseGradering.UGRADERT,
+                folkeregistermetadata = FolkeregisterMetadata(
+                    aarsak = null,
+                    ajourholdstidspunkt = LocalDateTime.now(),
+                    gyldighetstidspunkt = LocalDateTime.now(),
+                    kilde = "",
+                    opphoerstidspunkt = null,
+                    sekvens = 1,
+                ),
+                metadata = EndringsMetadata(
+                    endringer = listOf(),
+                    master = Kilde.FREG
+                )
             )
         )
 
@@ -88,7 +116,14 @@ class PersonServiceTest {
         // language=JSON
         JSONAssert.assertEquals(
             """
-            {"@løsning": {"fornavn": "test", "etternavn":  "testesen", "mellomnavn": null, "fødselsdato": "2020-04-10" } }
+            {"@løsning": {
+                "fornavn": "test", 
+                "etternavn":  "testesen", 
+                "mellomnavn": null, 
+                "fødselsdato": "2020-04-10",
+                "adressebeskyttelseGradering": "UGRADERT"
+              }
+            }
             """.trimIndent(),
             rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT
         )
