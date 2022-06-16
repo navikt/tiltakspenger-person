@@ -65,11 +65,12 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
 
     fun håndterFeil(clientError: PDLClientError) {
         when (clientError) {
-            PDLClientError.FantIkkePerson -> log.error { "Fant ikke person" }
             is PDLClientError.UkjentFeil -> log.error { clientError.errors }
             PDLClientError.NavnKunneIkkeAvklares -> log.error { "Navn kunne ikke avklares" }
             is PDLClientError.NetworkError -> log.error { clientError.exception }
             PDLClientError.IngenNavnFunnet -> log.error { "Fant ingen navn i PDL" }
+            PDLClientError.ResponsManglerPerson -> log.error { "Respons fra PDL inneholdt ikke person" }
+            is PDLClientError.SerializationException -> log.error { "Bad message" }
         }
     }
 }

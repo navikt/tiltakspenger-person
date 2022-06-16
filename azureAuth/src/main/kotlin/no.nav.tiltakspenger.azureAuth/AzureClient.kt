@@ -9,7 +9,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
-fun azureClient(config: OauthConfig, engine: HttpClientEngine = CIO.create()): HttpClient {
+fun azureClient(config: OauthConfig, engine: HttpClientEngine = CIO.create(), configBlock: HttpClientConfig<*>.() -> Unit = {}): HttpClient {
     val provider = AzureTokenProvider(config, engine)
     return HttpClient(engine) {
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
@@ -25,5 +25,6 @@ fun azureClient(config: OauthConfig, engine: HttpClientEngine = CIO.create()): H
                 }
             }
         }
+        apply(configBlock)
     }
 }

@@ -19,7 +19,6 @@ val url = getPDLUrl()
 const val INDIVIDSTONAD = "IND"
 
 sealed class PDLClientError {
-    object FantIkkePerson : PDLClientError()
     object IngenNavnFunnet : PDLClientError()
     object NavnKunneIkkeAvklares : PDLClientError()
     object ResponsManglerPerson: PDLClientError()

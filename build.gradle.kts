@@ -3,7 +3,7 @@ val ktorVersion = "2.0.2"
 val kotlinxSerializationVersion = "1.3.3"
 
 plugins {
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "1.7.0"
     id("io.gitlab.arturbosch.detekt") version "1.20.0"
 }
 
