@@ -13,6 +13,7 @@ allprojects {
         maven("https://packages.confluent.io/maven/")
         maven("https://jitpack.io")
     }
+    apply(plugin = "org.jmailen.kotlinter")
 }
 
 configurations.all {
@@ -23,6 +24,11 @@ configurations.all {
 java {
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
+}
+
+tasks.check {
+    // Må ligge på root nivå
+    dependsOn("installKotlinterPrePushHook")
 }
 
 //detekt {

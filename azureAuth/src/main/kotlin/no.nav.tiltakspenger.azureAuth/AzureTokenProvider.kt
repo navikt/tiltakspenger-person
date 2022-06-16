@@ -2,16 +2,13 @@ package no.nav.tiltakspenger.azureAuth
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.engine.*
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.auth.providers.BearerTokens
+import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.get
 import io.ktor.http.Parameters
 import io.ktor.http.ParametersBuilder
-import io.ktor.serialization.kotlinx.json.*
-
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,14 +1,17 @@
-import arrow.core.Either
+
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.fail
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.ktor.client.*
-import io.ktor.client.engine.mock.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.headersOf
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient

@@ -1,6 +1,11 @@
-import io.ktor.client.engine.mock.*
-import io.ktor.client.request.*
-import io.ktor.http.*
+
+import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.respond
+import io.ktor.client.request.get
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.headersOf
 import kotlinx.coroutines.runBlocking
 import no.nav.tiltakspenger.azureAuth.OauthConfig
 import no.nav.tiltakspenger.azureAuth.azureClient
@@ -27,7 +32,8 @@ class AzureClientTest {
                         |"access_token": "$accessToken", 
                         |"token_type": "access_token", 
                         |"ext_expires_in": "1", 
-                        |"expires_in": "1" }""".trimMargin(),
+                        |"expires_in": "1" }
+                    """.trimMargin(),
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )
@@ -56,5 +62,4 @@ class AzureClientTest {
         }
         assertEquals(actualAuthHeader, "Bearer $accessToken")
     }
-
 }
