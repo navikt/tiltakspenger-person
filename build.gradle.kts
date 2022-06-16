@@ -4,7 +4,7 @@ val kotlinxSerializationVersion = "1.3.3"
 
 plugins {
     kotlin("jvm") version "1.7.0"
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    id("org.jmailen.kotlinter") version "3.10.0"
 }
 
 allprojects {
@@ -25,11 +25,11 @@ java {
     targetCompatibility = javaVersion
 }
 
-detekt {
-    buildUponDefaultConfig = true
-    allRules = false
-    config = files("$projectDir/config/detekt.yml")
-}
+//detekt {
+//    buildUponDefaultConfig = true
+//    allRules = false
+//    config = files("$projectDir/config/detekt.yml")
+//}
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")

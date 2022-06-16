@@ -8,13 +8,13 @@ import no.nav.tiltakspenger.fakta.person.pdl.models.PdlPerson
 
 @Serializable
 data class HentPersonRepsonse(
-    val hentPerson: PdlPerson?
+    val hentPerson: PdlPerson?,
 )
 
 @Serializable
 data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
-    val errors: List<PdlError>? = null
+    val errors: List<PdlError>? = null,
 ) {
     fun extractPerson(): Either<PDLClientError, PdlPerson> {
         if (this.errors != null && this.errors.isNotEmpty()) {
