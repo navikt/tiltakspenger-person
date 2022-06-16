@@ -2,7 +2,7 @@ val javaVersion = JavaVersion.VERSION_17
 val ktorVersion = "2.0.2"
 val kotlinxSerializationVersion = "1.3.3"
 val graphqlKotlinVersion = "5.3.1"
-val kotestVersion = "5.3.0"
+val kotestVersion = "5.3.1"
 
 plugins {
     id("com.github.johnrengelman.shadow") version "7.1.2"
