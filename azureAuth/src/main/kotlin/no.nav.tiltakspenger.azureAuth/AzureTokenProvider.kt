@@ -15,10 +15,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 class AzureTokenProvider(
-    val config: OauthConfig,
+    private val config: OauthConfig,
     engine: HttpClientEngine
 ) {
-    val azureHttpClient = HttpClient(engine) {
+    private val azureHttpClient = HttpClient(engine) {
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
     }
 

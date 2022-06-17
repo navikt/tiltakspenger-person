@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 class PDLClientTest {
 
     private fun mockClient(response: String): HttpClient {
-        val mockEngine = MockEngine() {
+        val mockEngine = MockEngine {
             respond(
                 content = response,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
@@ -60,7 +60,7 @@ class PDLClientTest {
             pdlClient.hentPerson("test")
         }
             .mapLeft { it shouldBeSameInstanceAs PDLClientError.ResponsManglerPerson }
-            .map { _ -> fail("Serialization of bad payload should result in an error") }
+            .map { fail("Serialization of bad payload should result in an error") }
     }
 
     @Test
@@ -71,6 +71,6 @@ class PDLClientTest {
             pdlClient.hentPerson("test")
         }
             .mapLeft { (it is PDLClientError.SerializationException) shouldBe true }
-            .map { _ -> fail("Serialization of bad payload should result in an error") }
+            .map { fail("Serialization of bad payload should result in an error") }
     }
 }

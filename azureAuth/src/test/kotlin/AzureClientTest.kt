@@ -38,7 +38,7 @@ class AzureClientTest {
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )
                 else -> {
-                    actualAuthHeader = request.headers.get("Authorization")
+                    actualAuthHeader = request.headers["Authorization"]
                     respond(
                         content = """{ "token_endpoint": "http://localhost/well-known" }""",
                         status = HttpStatusCode.OK,

@@ -62,7 +62,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
         }
     }
 
-    fun håndterFeil(clientError: PDLClientError) {
+    private fun håndterFeil(clientError: PDLClientError) {
         when (clientError) {
             is PDLClientError.UkjentFeil -> log.error { clientError.errors }
             PDLClientError.NavnKunneIkkeAvklares -> log.error { "Navn kunne ikke avklares" }

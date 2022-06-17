@@ -43,7 +43,7 @@ fun Throwable.toPdlClientError() = when (this) {
 }
 
 class PDLClient(
-    val client: HttpClient = azureClient(
+    private val client: HttpClient = azureClient(
         OauthConfig.fromEnv(
             scope = Configuration.getPdlScope(),
         ),
