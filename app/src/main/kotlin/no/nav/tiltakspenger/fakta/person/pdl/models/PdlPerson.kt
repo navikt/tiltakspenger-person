@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class PdlPerson(
     val navn: List<Navn>,
     val foedsel: List<Fødsel>,
-    val adressebeskyttelse: List<Adressebeskyttelse>
+    val adressebeskyttelse: List<Adressebeskyttelse>,
 )

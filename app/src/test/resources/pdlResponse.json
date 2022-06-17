@@ -1,5 +1,12 @@
 {
   "data": {
+    "hentGeografiskTilknytning": {
+      "gtType": "UTLAND",
+      "gtKommune": null,
+      "gtBydel": null,
+      "gtLand": "FJI",
+      "regel": "23"
+    },
     "hentPerson": {
       "navn": [
         {

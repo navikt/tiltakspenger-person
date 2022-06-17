@@ -4,11 +4,13 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import kotlinx.serialization.Serializable
+import no.nav.tiltakspenger.fakta.person.pdl.models.GeografiskTilknytning
 import no.nav.tiltakspenger.fakta.person.pdl.models.PdlPerson
 
 @Serializable
 data class HentPersonRepsonse(
     val hentPerson: PdlPerson?,
+    val hentGeografiskTilknytning: GeografiskTilknytning?
 )
 
 @Serializable
