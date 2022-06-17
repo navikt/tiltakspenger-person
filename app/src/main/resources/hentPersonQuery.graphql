@@ -7,6 +7,15 @@ query($ident: ID!){
         regel
     }
     hentPerson(ident: $ident) {
+        adressebeskyttelse(historikk: false) {
+            gradering
+            folkeregistermetadata {
+                ...folkeregistermetadataDetails
+            }
+            metadata {
+                ...metadataDetails
+            }
+        }
         forelderBarnRelasjon {
             relatertPersonsIdent
             relatertPersonsRolle

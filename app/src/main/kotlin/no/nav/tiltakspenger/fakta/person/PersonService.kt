@@ -74,7 +74,6 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 log.error { clientError.exception }
             }
             PDLClientError.GraderingKunneIkkeAvklares -> log.error { "Kunne ikke avklare gradering" }
-            PDLClientError.IngenGraderingFunnet -> log.error { "Fant ingen gradering" }
         }
     }
 }

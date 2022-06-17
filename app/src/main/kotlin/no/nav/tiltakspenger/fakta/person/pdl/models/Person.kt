@@ -3,7 +3,7 @@ package no.nav.tiltakspenger.fakta.person.pdl.models
 data class Person(
     val fødsel: Fødsel?,
     val navn: Navn,
-    val adressebeskyttelse: Adressebeskyttelse,
+    val adressebeskyttelse: Adressebeskyttelse?,
 ) {
     fun toMap(): Map<String, Any?> {
         return mapOf(
@@ -11,7 +11,7 @@ data class Person(
             "fornavn" to this.navn.fornavn,
             "etternavn" to this.navn.etternavn,
             "mellomnavn" to this.navn.mellomnavn,
-            "adressebeskyttelseGradering" to this.adressebeskyttelse.gradering
+            "adressebeskyttelseGradering" to this.adressebeskyttelse?.gradering
         )
     }
 }

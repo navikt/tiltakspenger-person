@@ -29,7 +29,6 @@ const val INDIVIDSTONAD = "IND"
 
 sealed class PDLClientError {
     object IngenNavnFunnet : PDLClientError()
-    object IngenGraderingFunnet : PDLClientError()
     object NavnKunneIkkeAvklares : PDLClientError()
     object GraderingKunneIkkeAvklares : PDLClientError()
     object ResponsManglerPerson : PDLClientError()
@@ -79,7 +78,7 @@ class PDLClient(
             Person(
                 fødsel = avklarFødsel(person.foedsel),
                 navn = avklarNavn(person.navn).bind(),
-                adressebeskyttelse = avklarGradering(person.adressebeskyttelse).bind()
+                adressebeskyttelse = avklarGradering(person.adressebeskyttelse)
             )
         }
     }
