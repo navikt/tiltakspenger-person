@@ -25,4 +25,7 @@ data class HentPersonResponse(
         return this.data?.hentPerson?.right()
             ?: PDLClientError.ResponsManglerPerson.left()
     }
+    fun geografiskTilknytning(): GeografiskTilknytning? {
+        return data?.hentGeografiskTilknytning
+    }
 }

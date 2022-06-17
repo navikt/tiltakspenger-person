@@ -75,10 +75,13 @@ class PDLClient(
         return either {
             val response = fetchPerson(ident).bind()
             val person = response.extractPerson().bind()
+            val geografiskTilknytning = response.geografiskTilknytning()
             Person(
                 fødsel = avklarFødsel(person.foedsel),
                 navn = avklarNavn(person.navn).bind(),
-                adressebeskyttelse = avklarGradering(person.adressebeskyttelse)
+                adressebeskyttelse = avklarGradering(person.adressebeskyttelse),
+                relasjoner = person.forelderBarnRelasjon,
+                geografiskTilknytning = geografiskTilknytning
             )
         }
     }

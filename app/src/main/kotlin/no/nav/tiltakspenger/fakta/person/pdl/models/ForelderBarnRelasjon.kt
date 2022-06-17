@@ -42,6 +42,6 @@ data class ForelderBarnRelasjon(
     val relatertPersonsRolle: ForelderBarnRelasjonRolle,
     val minRolleForPerson: ForelderBarnRelasjonRolle?,
     val relatertPersonUtenFolkeregisteridentifikator: RelatertBiPerson?,
-    val folkeregistermetadata: FolkeregisterMetadata?,
-    val metadata: EndringsMetadata
-)
+    override val folkeregistermetadata: FolkeregisterMetadata?,
+    override val metadata: EndringsMetadata
+) : Changeable

@@ -48,6 +48,8 @@ class PersonServiceTest {
             opphoerstidspunkt = null
         )
         val person = Person(
+            geografiskTilknytning = null,
+            relasjoner = emptyList(),
             fødsel = Fødsel(
                 foedselsdato = LocalDate.of(2020, Month.APRIL, 10),
                 folkeregistermetadata = FolkeregisterMetadata(
