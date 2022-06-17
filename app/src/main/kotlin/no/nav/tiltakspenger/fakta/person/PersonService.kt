@@ -69,7 +69,10 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
             is PDLClientError.NetworkError -> log.error { clientError.exception }
             PDLClientError.IngenNavnFunnet -> log.error { "Fant ingen navn i PDL" }
             PDLClientError.ResponsManglerPerson -> log.error { "Respons fra PDL inneholdt ikke person" }
-            is PDLClientError.SerializationException -> log.error { "Bad message" }
+            is PDLClientError.SerializationException -> {
+                log.error { "Could not serialize response" }
+                log.error { clientError.exception }
+            }
             PDLClientError.GraderingKunneIkkeAvklares -> log.error { "Kunne ikke avklare gradering" }
             PDLClientError.IngenGraderingFunnet -> log.error { "Fant ingen gradering" }
         }
