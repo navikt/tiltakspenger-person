@@ -8,6 +8,7 @@
       "regel": "23"
     },
     "hentPerson": {
+      "forelderBarnRelasjon": [],
       "navn": [
         {
           "fornavn": "TRIVIELL",

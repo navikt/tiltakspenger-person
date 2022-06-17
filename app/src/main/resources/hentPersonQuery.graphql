@@ -1,5 +1,33 @@
 query($ident: ID!){
+    hentGeografiskTilknytning(ident: $ident) {
+        gtType,
+        gtKommune,
+        gtBydel,
+        gtLand,
+        regel
+    }
     hentPerson(ident: $ident) {
+        forelderBarnRelasjon {
+            relatertPersonsIdent
+            relatertPersonsRolle
+            minRolleForPerson
+            relatertPersonUtenFolkeregisteridentifikator {
+                navn {
+                    fornavn
+                    mellomnavn
+                    etternavn
+                }
+                foedselsdato
+                statsborgerskap
+                kjoenn
+            }
+            folkeregistermetadata {
+                ...folkeregistermetadataDetails
+            }
+            metadata {
+                ...metadataDetails
+            }
+        }
         navn(historikk: false) {
             fornavn
             mellomnavn
