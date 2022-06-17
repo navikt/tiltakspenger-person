@@ -47,14 +47,7 @@ class PDLClient(
         OauthConfig.fromEnv(
             scope = Configuration.getPdlScope(),
         ),
-    ) {
-        install(HttpRequestRetry) {
-            retryOnExceptionIf { _, cause ->
-                cause is IOException
-            }
-            exponentialDelay()
-        }
-    },
+    ),
 ) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {
