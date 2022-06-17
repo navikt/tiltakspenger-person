@@ -11,7 +11,7 @@ import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 
 private val log = KotlinLogging.logger {}
-class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()):
+class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()) :
     River.PacketListener {
 
     init {
@@ -59,7 +59,6 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                     log.info { "Vi skal sende ${packet.toJson()}" }
                     context.publish(packet.toJson())
                 }
-
         }
     }
 

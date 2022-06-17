@@ -2,10 +2,8 @@ package no.nav.tiltakspenger.fakta.person.pdl.models
 
 import kotlinx.serialization.Serializable
 import no.nav.tiltakspenger.fakta.person.pdl.EndringsMetadata
-import no.nav.tiltakspenger.fakta.person.pdl.nyeste
 import no.nav.tiltakspenger.fakta.person.seralizers.LocalDateSerializer
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Serializable
 data class Fødsel(
@@ -13,7 +11,7 @@ data class Fødsel(
     val foedselsdato: LocalDate,
     override val folkeregistermetadata: FolkeregisterMetadata,
     override val metadata: EndringsMetadata
-): Changeable
+) : Changeable
 
 const val FREG = "FREG"
 fun String.isFreg() = this.equals(FREG, ignoreCase = true)
