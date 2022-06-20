@@ -1,9 +1,11 @@
 package no.nav.tiltakspenger.fakta.person.pdl.models
 
 import kotlinx.serialization.Serializable
+import no.nav.tiltakspenger.fakta.person.domain.models.Barn
 import no.nav.tiltakspenger.fakta.person.pdl.EndringsMetadata
 import no.nav.tiltakspenger.fakta.person.seralizers.LocalDateSerializer
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Serializable
 enum class ForelderBarnRelasjonRolle {
@@ -45,3 +47,22 @@ data class ForelderBarnRelasjon(
     override val folkeregistermetadata: FolkeregisterMetadata?,
     override val metadata: EndringsMetadata
 ) : Changeable
+
+fun List<ForelderBarnRelasjon>.toBarn(): List<Barn> {
+    return this
+        .filter { it.relatertPersonsRolle == ForelderBarnRelasjonRolle.BARN }
+        .groupBy { it.relatertPersonsIdent }
+        .mapNotNull { (_, barn) ->
+            barn.maxByOrNull { getEndringstidspunktOrNull(it) ?: LocalDateTime.MIN }
+        }
+        .map {
+            val barn = it.relatertPersonUtenFolkeregisteridentifikator
+            val navn = barn?.navn
+            Barn(
+                fornavn = navn?.fornavn,
+                mellomnavn = navn?.fornavn,
+                etternavn = navn?.fornavn,
+                foedselsdato = barn?.foedselsdato
+            )
+        }
+}

@@ -6,23 +6,18 @@ import arrow.core.left
 import arrow.core.right
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
-import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.request.accept
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.utils.io.errors.IOException
 import kotlinx.serialization.SerializationException
 import no.nav.tiltakspenger.azureAuth.OauthConfig
 import no.nav.tiltakspenger.azureAuth.azureClient
 import no.nav.tiltakspenger.fakta.person.Configuration
 import no.nav.tiltakspenger.fakta.person.Configuration.getPDLUrl
-import no.nav.tiltakspenger.fakta.person.pdl.models.Person
-import no.nav.tiltakspenger.fakta.person.pdl.models.avklarFødsel
-import no.nav.tiltakspenger.fakta.person.pdl.models.avklarGradering
-import no.nav.tiltakspenger.fakta.person.pdl.models.avklarNavn
+import no.nav.tiltakspenger.fakta.person.domain.models.Person
 
 val url = getPDLUrl()
 const val INDIVIDSTONAD = "IND"
@@ -67,15 +62,7 @@ class PDLClient(
     suspend fun hentPerson(ident: String): Either<PDLClientError, Person> {
         return either {
             val response = fetchPerson(ident).bind()
-            val person = response.extractPerson().bind()
-            val geografiskTilknytning = response.geografiskTilknytning()
-            Person(
-                fødsel = avklarFødsel(person.foedsel),
-                navn = avklarNavn(person.navn).bind(),
-                adressebeskyttelse = avklarGradering(person.adressebeskyttelse),
-                relasjoner = person.forelderBarnRelasjon,
-                geografiskTilknytning = geografiskTilknytning
-            )
+            response.toPerson().bind()
         }
     }
 }

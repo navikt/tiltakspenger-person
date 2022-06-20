@@ -6,86 +6,37 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
-import no.nav.tiltakspenger.fakta.person.pdl.Endring
-import no.nav.tiltakspenger.fakta.person.pdl.EndringsMetadata
+import no.nav.tiltakspenger.fakta.person.domain.models.Barn
+import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
-import no.nav.tiltakspenger.fakta.person.pdl.models.Adressebeskyttelse
 import no.nav.tiltakspenger.fakta.person.pdl.models.AdressebeskyttelseGradering
-import no.nav.tiltakspenger.fakta.person.pdl.models.FolkeregisterMetadata
-import no.nav.tiltakspenger.fakta.person.pdl.models.Fødsel
-import no.nav.tiltakspenger.fakta.person.pdl.models.Kilde
-import no.nav.tiltakspenger.fakta.person.pdl.models.Navn
-import no.nav.tiltakspenger.fakta.person.pdl.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.query
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.Month
 
 class PersonServiceTest {
     private fun mockRapid(): Pair<TestRapid, PDLClient> {
-        val metadata = EndringsMetadata(
-            endringer = listOf(
-                Endring(
-                    kilde = Kilde.FREG,
-                    type = "OPPRETT",
-                    registrert = LocalDateTime.now(),
-                    registrertAv = "",
-                    systemkilde = Kilde.FREG
-                )
-            ),
-            master = Kilde.FREG
-        )
-        val folkeregisterMetadata = FolkeregisterMetadata(
-            kilde = Kilde.FREG,
-            sekvens = null,
-            gyldighetstidspunkt = LocalDateTime.now(),
-            ajourholdstidspunkt = LocalDateTime.now(),
-            aarsak = null,
-            opphoerstidspunkt = null
-        )
         val person = Person(
-            geografiskTilknytning = null,
-            relasjoner = emptyList(),
-            fødsel = Fødsel(
-                foedselsdato = LocalDate.of(2020, Month.APRIL, 10),
-                folkeregistermetadata = FolkeregisterMetadata(
-                    aarsak = null,
-                    ajourholdstidspunkt = LocalDateTime.now(),
-                    gyldighetstidspunkt = LocalDateTime.now(),
-                    kilde = "",
-                    opphoerstidspunkt = null,
-                    sekvens = 1,
-                ),
-                metadata = EndringsMetadata(
-                    endringer = listOf(),
-                    master = Kilde.FREG
+            barn = listOf(
+                Barn(
+                    fornavn = "test",
+                    etternavn = "testesen",
+                    mellomnavn = null,
+                    foedselsdato = LocalDate.now()
                 )
             ),
-            navn = Navn(
-                fornavn = "test",
-                etternavn = "testesen",
-                metadata = metadata,
-                folkeregistermetadata = folkeregisterMetadata
-            ),
-            adressebeskyttelse = Adressebeskyttelse(
-                gradering = AdressebeskyttelseGradering.UGRADERT,
-                folkeregistermetadata = FolkeregisterMetadata(
-                    aarsak = null,
-                    ajourholdstidspunkt = LocalDateTime.now(),
-                    gyldighetstidspunkt = LocalDateTime.now(),
-                    kilde = "",
-                    opphoerstidspunkt = null,
-                    sekvens = 1,
-                ),
-                metadata = EndringsMetadata(
-                    endringer = listOf(),
-                    master = Kilde.FREG
-                )
-            )
+            foedselsdato = LocalDate.of(2020, Month.APRIL, 10),
+            fornavn = "test",
+            mellomnavn = null,
+            etternavn = "testesen",
+            adressebeskyttelseGradering = AdressebeskyttelseGradering.UGRADERT,
+            gtLand = "NOR",
+            gtKommune = null,
+            gtBydel = null,
         )
 
         val rapid = TestRapid()
@@ -119,11 +70,23 @@ class PersonServiceTest {
         JSONAssert.assertEquals(
             """
             {"@løsning": {
-                "fornavn": "test", 
-                "etternavn":  "testesen", 
-                "mellomnavn": null, 
-                "fødselsdato": "2020-04-10",
-                "adressebeskyttelseGradering": "UGRADERT"
+                "person": {
+                    "fornavn": "test",
+                    "etternavn":  "testesen",
+                    "mellomnavn": null,
+                    "fødselsdato": "2020-04-10",
+                    "adressebeskyttelseGradering": "UGRADERT",
+                    "gtLand": "NOR",
+                    "gtKommune": null,
+                    "gtBydel": null,
+                    "barn": [{
+                      "fornavn": "test",
+                      "etternavn": "testesen",
+                      "mellomnavn": null,
+                      "foedselsdato": "2022-06-20"
+                    }]
+                },
+                "feil": null
               }
             }
             """.trimIndent(),
