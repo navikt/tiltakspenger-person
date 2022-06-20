@@ -16,7 +16,7 @@ dependencies {
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(kotlin("stdlib"))
-    implementation("com.github.navikt:rapids-and-rivers:2022061213251655033125.cc27254b1735")
+    implementation("com.github.navikt:rapids-and-rivers:2022061809451655538329.d6deccc62862")
     implementation("io.github.microutils:kotlin-logging-jvm:2.1.23")
     implementation("org.jetbrains:annotations:23.0.0")
     // Ktor client
