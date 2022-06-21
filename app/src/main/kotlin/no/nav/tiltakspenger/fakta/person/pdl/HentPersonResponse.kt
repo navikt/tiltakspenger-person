@@ -22,7 +22,7 @@ data class HentPersonRepsonse(
 @Serializable
 data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
-    val errors: List<PdlError>? = null,
+    val errors: List<PdlError> = emptyList(),
 ) {
     fun extractPerson(): Either<PDLClientError, PdlPerson> {
         if (this.errors != null && this.errors.isNotEmpty()) {
@@ -46,7 +46,7 @@ data class HentPersonResponse(
                 fornavn = navn.fornavn,
                 mellomnavn = navn.mellomnavn,
                 etternavn = navn.etternavn,
-                foedselsdato = fødsel?.foedselsdato,
+                fødselsdato = fødsel?.foedselsdato,
                 adressebeskyttelseGradering = adressebeskyttelse?.gradering,
                 barn = person.forelderBarnRelasjon.toBarn(),
                 gtBydel = geografiskTilknytning?.gtBydel,

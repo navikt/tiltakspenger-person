@@ -62,7 +62,7 @@ fun List<ForelderBarnRelasjon>.toBarn(): List<Barn> {
                 fornavn = navn?.fornavn,
                 mellomnavn = navn?.fornavn,
                 etternavn = navn?.fornavn,
-                foedselsdato = barn?.foedselsdato
+                fødselsdato = barn?.foedselsdato
             )
         }
 }

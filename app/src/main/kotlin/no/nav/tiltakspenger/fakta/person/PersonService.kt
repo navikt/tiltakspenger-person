@@ -59,7 +59,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                     )
                 }
                 .map { person ->
-                    packet["@løsning"] = Respons(person = person).toMap()
+                    packet["@løsning"] = Respons(person = person)
                     log.info { "Løst behov for behov $behovId" }
                     log.info { "Vi skal sende ${packet.toJson()}" }
                     context.publish(packet.toJson())
@@ -86,7 +86,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
             }
             PDLClientError.ResponsManglerPerson -> {
                 log.error { "Respons fra PDL inneholdt ikke person" }
-                packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet).toMap()
+                packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet)
                 context.publish(packet.toJson())
             }
             is PDLClientError.SerializationException -> {

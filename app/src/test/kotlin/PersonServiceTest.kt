@@ -26,10 +26,10 @@ class PersonServiceTest {
                     fornavn = "test",
                     etternavn = "testesen",
                     mellomnavn = null,
-                    foedselsdato = LocalDate.now()
+                    fødselsdato = LocalDate.now()
                 )
             ),
-            foedselsdato = LocalDate.of(2020, Month.APRIL, 10),
+            fødselsdato = LocalDate.of(2020, Month.APRIL, 10),
             fornavn = "test",
             mellomnavn = null,
             etternavn = "testesen",
@@ -83,7 +83,7 @@ class PersonServiceTest {
                       "fornavn": "test",
                       "etternavn": "testesen",
                       "mellomnavn": null,
-                      "foedselsdato": "2022-06-20"
+                      "fødselsdato": "2022-06-21"
                     }]
                 },
                 "feil": null
