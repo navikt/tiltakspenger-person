@@ -73,7 +73,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("Ukjent feil")
             }
             PDLClientError.NavnKunneIkkeAvklares -> {
-                log.error { "Navn kunne ikke avklares" }
+                log.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Navn kunne ikke avklares")
             }
             is PDLClientError.NetworkError -> {
@@ -81,7 +81,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("PDL er nede!!")
             }
             PDLClientError.IngenNavnFunnet -> {
-                log.error { "Fant ingen navn i PDL" }
+                log.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Fant ingen navn i PDL")
             }
             PDLClientError.ResponsManglerPerson -> {

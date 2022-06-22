@@ -26,7 +26,7 @@ class PersonServiceTest {
                     fornavn = "test",
                     etternavn = "testesen",
                     mellomnavn = null,
-                    fødselsdato = LocalDate.now()
+                    fødselsdato = LocalDate.of(2022, Month.JUNE, 21)
                 )
             ),
             fødselsdato = LocalDate.of(2020, Month.APRIL, 10),
