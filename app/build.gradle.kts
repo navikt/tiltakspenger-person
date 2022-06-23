@@ -5,7 +5,6 @@ val graphqlKotlinVersion = "5.3.1"
 val kotestVersion = "5.3.0"
 
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("plugin.serialization") version "1.6.21"
     application
 }

@@ -25,7 +25,7 @@ data class HentPersonResponse(
     val errors: List<PdlError> = emptyList(),
 ) {
     fun extractPerson(): Either<PDLClientError, PdlPerson> {
-        if (this.errors != null && this.errors.isNotEmpty()) {
+        if (this.errors.isNotEmpty()) {
             return PDLClientError.UkjentFeil(this.errors).left()
         }
         return this.data?.hentPerson?.right()
