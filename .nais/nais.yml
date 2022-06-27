@@ -11,14 +11,12 @@ spec:
   replicas:
     min: 1
     max: 1
-  ingresses:
-    - https://{{ name }}.dev.intern.nav.no
   liveness:
     path: /isalive
   readiness:
     path: /isready
   kafka:
-    pool: nav-dev
+    pool: {{ kafka.pool }}
   secureLogs:
     enabled: true
   azure:
