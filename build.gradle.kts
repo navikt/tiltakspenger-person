@@ -4,7 +4,7 @@ val kotlinxSerializationVersion = "1.3.3"
 
 plugins {
     kotlin("jvm") version "1.7.0"
-    id("org.jmailen.kotlinter") version "3.10.0"
+    id("org.jmailen.kotlinter") version "3.11.1"
 }
 
 allprojects {
