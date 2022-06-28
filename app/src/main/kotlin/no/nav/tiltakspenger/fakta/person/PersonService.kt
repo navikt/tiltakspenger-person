@@ -77,8 +77,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("Navn kunne ikke avklares")
             }
             is PDLClientError.NetworkError -> {
-                log.error { clientError.exception }
-                throw IllegalStateException("PDL er nede!!")
+                throw IllegalStateException("PDL er nede!!", clientError.exception)
             }
             PDLClientError.IngenNavnFunnet -> {
                 log.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
@@ -90,9 +89,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 context.publish(packet.toJson())
             }
             is PDLClientError.SerializationException -> {
-                log.error { "Could not serialize response" }
-                log.error { clientError.exception }
-                throw IllegalStateException("Feil ved serializering")
+                throw IllegalStateException("Feil ved serializering", clientError.exception)
             }
             PDLClientError.GraderingKunneIkkeAvklares -> {
                 log.error { "Kunne ikke avklare gradering" }
