@@ -99,8 +99,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("Kunne ikke avklare gradering")
             }
             is PDLClientError.AzureAuthFailureException -> {
-                log.error { clientError.exception }
-                throw IllegalStateException("Kunne ikke autentisere mot Azure")
+                throw IllegalStateException("Kunne ikke autentisere mot Azure", clientError.exception)
             }
         }
     }
