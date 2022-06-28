@@ -18,6 +18,7 @@ fun azureClient(
 ): HttpClient {
     val provider = AzureTokenProvider(config, engine)
     return HttpClient(engine) {
+        expectSuccess = true
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
         install(Auth) {
             bearer {
