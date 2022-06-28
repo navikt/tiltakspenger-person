@@ -31,7 +31,9 @@ class AzureTokenProvider(
     suspend fun getToken(): String {
         val currentToken = tokenCache.token
         if (currentToken != null && !tokenCache.isExpired()) return currentToken
-        return clientCredentials()
+        return kotlin.runCatching { clientCredentials() }
+            .onFailure { throw AzureAuthException(it) }
+            .getOrThrow()
     }
 
     private suspend fun clientCredentials(): String {
@@ -62,3 +64,5 @@ data class WellKnown(
     @SerialName("token_endpoint")
     val tokenEndpoint: String
 )
+
+class AzureAuthException(exception: Throwable) : Throwable("Could not authenticate with Azure", exception)
