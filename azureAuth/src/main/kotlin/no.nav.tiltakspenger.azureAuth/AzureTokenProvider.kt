@@ -19,6 +19,7 @@ class AzureTokenProvider(
     engine: HttpClientEngine
 ) {
     private val azureHttpClient = HttpClient(engine) {
+        expectSuccess = true
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
     }
 
