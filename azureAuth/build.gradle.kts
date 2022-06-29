@@ -1,4 +1,4 @@
-val ktorVersion = "2.0.2"
+val ktorVersion = "2.0.3"
 
 plugins {
     kotlin("plugin.serialization") version "1.6.21"
