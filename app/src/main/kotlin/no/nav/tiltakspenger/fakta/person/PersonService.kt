@@ -61,7 +61,6 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 .map { person ->
                     packet["@løsning"] = Respons(person = person)
                     log.info { "Løst behov for behov $behovId" }
-                    log.info { "Vi skal sende ${packet.toJson()}" }
                     context.publish(packet.toJson())
                 }
         }
@@ -70,7 +69,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
         when (clientError) {
             is PDLClientError.UkjentFeil -> {
                 log.error { clientError.errors }
-                throw IllegalStateException("Ukjent feil")
+                throw IllegalStateException("Uhåndtert feil")
             }
             PDLClientError.NavnKunneIkkeAvklares -> {
                 log.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
