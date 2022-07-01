@@ -28,6 +28,7 @@ sealed class PDLClientError {
     object NavnKunneIkkeAvklares : PDLClientError()
     object GraderingKunneIkkeAvklares : PDLClientError()
     object ResponsManglerPerson : PDLClientError()
+    object FantIkkePerson : PDLClientError()
     data class NetworkError(val exception: Throwable) : PDLClientError()
     data class SerializationException(val exception: Throwable) : PDLClientError()
     data class UkjentFeil(val errors: List<PdlError>) : PDLClientError()

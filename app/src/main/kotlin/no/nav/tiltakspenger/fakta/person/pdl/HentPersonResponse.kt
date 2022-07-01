@@ -19,6 +19,8 @@ data class HentPersonRepsonse(
     val hentGeografiskTilknytning: GeografiskTilknytning?
 )
 
+const val FANT_IKKE_PERSON = "Fant ikke person"
+
 @Serializable
 data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
@@ -26,6 +28,7 @@ data class HentPersonResponse(
 ) {
     fun extractPerson(): Either<PDLClientError, PdlPerson> {
         if (this.errors.isNotEmpty()) {
+            if (errors.any { it.message == FANT_IKKE_PERSON }) return PDLClientError.FantIkkePerson.left()
             return PDLClientError.UkjentFeil(this.errors).left()
         }
         return this.data?.hentPerson?.right()

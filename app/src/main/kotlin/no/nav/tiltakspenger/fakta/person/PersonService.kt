@@ -82,6 +82,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 log.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Fant ingen navn i PDL")
             }
+            PDLClientError.FantIkkePerson,
             PDLClientError.ResponsManglerPerson -> {
                 log.error { "Respons fra PDL inneholdt ikke person" }
                 packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet)
