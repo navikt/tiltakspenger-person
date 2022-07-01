@@ -15,7 +15,7 @@ internal object Configuration {
     )
     fun getPdlScope(): String = getPropertyValueByEnvironment(
         devValue = "api://dev-fss.pdl.pdl-api/.default",
-        prodValue = "????"
+        prodValue = "api://prod-fss.pdl.pdl-api/.default"
     )
 
     private val defaultProperties =
