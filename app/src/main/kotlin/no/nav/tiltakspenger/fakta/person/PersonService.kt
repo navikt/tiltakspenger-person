@@ -12,23 +12,25 @@ import no.nav.tiltakspenger.fakta.person.domain.models.Respons
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 
-private val log = KotlinLogging.logger {}
+private val LOG = KotlinLogging.logger {}
+
 class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()) :
     River.PacketListener {
 
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAllOrAny("@behov", listOf("person"))
+                it.demandAllOrAny("@behov", listOf("Persondata"))
                 it.forbid("@løsning")
                 it.requireKey("@id", "@behovId")
                 it.requireArray("identer") {
                     requireKey("type", "historisk", "id")
                 }
+                //TODO: Bør skrives om til å motta "ident" som alltid er et fnr, ikke den strukturen vi har her nå.
                 it.require("identer") { identer ->
                     if (!identer.any { ident ->
-                        ident["type"].asText() == "fnr"
-                    }
+                            ident["type"].asText() == "fnr"
+                        }
                     ) throw IllegalArgumentException("Mangler fnr i identer")
                 }
             }
@@ -60,31 +62,33 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 }
                 .map { person ->
                     packet["@løsning"] = Respons(person = person)
-                    log.info { "Løst behov for behov $behovId" }
+                    LOG.info { "Løst behov for behov $behovId" }
                     context.publish(packet.toJson())
                 }
         }
     }
+
     private fun håndterFeil(clientError: PDLClientError, context: MessageContext, packet: JsonMessage) {
         when (clientError) {
             is PDLClientError.UkjentFeil -> {
-                log.error { clientError.errors }
+                LOG.error { clientError.errors }
                 throw IllegalStateException("Uhåndtert feil")
             }
             PDLClientError.NavnKunneIkkeAvklares -> {
-                log.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
+                LOG.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Navn kunne ikke avklares")
             }
             is PDLClientError.NetworkError -> {
                 throw IllegalStateException("PDL er nede!!", clientError.exception)
             }
             PDLClientError.IngenNavnFunnet -> {
-                log.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
+                LOG.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Fant ingen navn i PDL")
             }
             PDLClientError.FantIkkePerson,
-            PDLClientError.ResponsManglerPerson -> {
-                log.error { "Respons fra PDL inneholdt ikke person" }
+            PDLClientError.ResponsManglerPerson,
+            -> {
+                LOG.error { "Respons fra PDL inneholdt ikke person" }
                 packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet)
                 context.publish(packet.toJson())
             }
@@ -92,7 +96,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("Feil ved serializering", clientError.exception)
             }
             PDLClientError.GraderingKunneIkkeAvklares -> {
-                log.error { "Kunne ikke avklare gradering" }
+                LOG.error { "Kunne ikke avklare gradering" }
                 throw IllegalStateException("Kunne ikke avklare gradering")
             }
             is PDLClientError.AzureAuthFailureException -> {
