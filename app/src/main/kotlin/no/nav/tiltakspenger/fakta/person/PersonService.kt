@@ -28,10 +28,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 }
                 // TODO: Bør skrives om til å motta "ident" som alltid er et fnr, ikke den strukturen vi har her nå.
                 it.require("identer") { identer ->
-                    if (!identer.any { ident ->
-                        ident["type"].asText() == "fnr"
-                    }
-                    ) throw IllegalArgumentException("Mangler fnr i identer")
+                    require(identer.any { ident -> ident["type"].asText() == "fnr" }) { "Mangler fnr i identer" }
                 }
             }
         }.register(this)
@@ -68,6 +65,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
         }
     }
 
+    @Suppress("ThrowsCount", "UseCheckOrError")
     private fun håndterFeil(clientError: PDLClientError, context: MessageContext, packet: JsonMessage) {
         when (clientError) {
             is PDLClientError.UkjentFeil -> {

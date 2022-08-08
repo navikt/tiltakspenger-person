@@ -1,7 +1,5 @@
 package no.nav.tiltakspenger.fakta.person.pdl.models
 
-import no.nav.tiltakspenger.fakta.person.pdl.EndringsMetadata
-import no.nav.tiltakspenger.fakta.person.pdl.nyeste
 import java.time.LocalDateTime
 
 interface Changeable {

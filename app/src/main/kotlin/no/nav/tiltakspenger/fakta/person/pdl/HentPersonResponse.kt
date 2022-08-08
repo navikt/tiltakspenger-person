@@ -26,7 +26,8 @@ data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
     val errors: List<PdlError> = emptyList(),
 ) {
-    fun extractPerson(): Either<PDLClientError, PdlPerson> {
+    @Suppress("ReturnCount")
+    private fun extractPerson(): Either<PDLClientError, PdlPerson> {
         if (this.errors.isNotEmpty()) {
             if (errors.any { it.message == FANT_IKKE_PERSON }) return PDLClientError.FantIkkePerson.left()
             return PDLClientError.UkjentFeil(this.errors).left()
@@ -34,7 +35,7 @@ data class HentPersonResponse(
         return this.data?.hentPerson?.right()
             ?: PDLClientError.ResponsManglerPerson.left()
     }
-    fun geografiskTilknytning(): GeografiskTilknytning? {
+    private fun geografiskTilknytning(): GeografiskTilknytning? {
         return data?.hentGeografiskTilknytning
     }
 
