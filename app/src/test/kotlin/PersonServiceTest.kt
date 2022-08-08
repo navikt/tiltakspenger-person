@@ -57,7 +57,7 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-              "@behov": ["person"], 
+              "@behov": ["Persondata"], 
               "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
               "@id": "1", 
               "@behovId": "2"

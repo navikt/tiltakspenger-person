@@ -26,11 +26,11 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 it.requireArray("identer") {
                     requireKey("type", "historisk", "id")
                 }
-                //TODO: Bør skrives om til å motta "ident" som alltid er et fnr, ikke den strukturen vi har her nå.
+                // TODO: Bør skrives om til å motta "ident" som alltid er et fnr, ikke den strukturen vi har her nå.
                 it.require("identer") { identer ->
                     if (!identer.any { ident ->
-                            ident["type"].asText() == "fnr"
-                        }
+                        ident["type"].asText() == "fnr"
+                    }
                     ) throw IllegalArgumentException("Mangler fnr i identer")
                 }
             }
@@ -74,17 +74,21 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 LOG.error { clientError.errors }
                 throw IllegalStateException("Uhåndtert feil")
             }
+
             PDLClientError.NavnKunneIkkeAvklares -> {
                 LOG.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Navn kunne ikke avklares")
             }
+
             is PDLClientError.NetworkError -> {
                 throw IllegalStateException("PDL er nede!!", clientError.exception)
             }
+
             PDLClientError.IngenNavnFunnet -> {
                 LOG.error { "Fant ingen navn i PDL, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Fant ingen navn i PDL")
             }
+
             PDLClientError.FantIkkePerson,
             PDLClientError.ResponsManglerPerson,
             -> {
@@ -92,13 +96,16 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet)
                 context.publish(packet.toJson())
             }
+
             is PDLClientError.SerializationException -> {
                 throw IllegalStateException("Feil ved serializering", clientError.exception)
             }
+
             PDLClientError.GraderingKunneIkkeAvklares -> {
                 LOG.error { "Kunne ikke avklare gradering" }
                 throw IllegalStateException("Kunne ikke avklare gradering")
             }
+
             is PDLClientError.AzureAuthFailureException -> {
                 throw IllegalStateException("Kunne ikke autentisere mot Azure", clientError.exception)
             }
