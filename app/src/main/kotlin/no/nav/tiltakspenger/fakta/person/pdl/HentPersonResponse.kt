@@ -16,7 +16,7 @@ import no.nav.tiltakspenger.fakta.person.pdl.models.toBarn
 @Serializable
 data class HentPersonRepsonse(
     val hentPerson: PdlPerson?,
-    val hentGeografiskTilknytning: GeografiskTilknytning?
+    val hentGeografiskTilknytning: GeografiskTilknytning?,
 )
 
 const val FANT_IKKE_PERSON = "Fant ikke person"
@@ -26,15 +26,14 @@ data class HentPersonResponse(
     val data: HentPersonRepsonse? = null,
     val errors: List<PdlError> = emptyList(),
 ) {
-    @Suppress("ReturnCount")
     private fun extractPerson(): Either<PDLClientError, PdlPerson> {
-        if (this.errors.isNotEmpty()) {
-            if (errors.any { it.message == FANT_IKKE_PERSON }) return PDLClientError.FantIkkePerson.left()
-            return PDLClientError.UkjentFeil(this.errors).left()
-        }
-        return this.data?.hentPerson?.right()
+        return if (this.errors.isNotEmpty()) {
+            if (errors.any { it.message == FANT_IKKE_PERSON }) PDLClientError.FantIkkePerson.left()
+            else PDLClientError.UkjentFeil(this.errors).left()
+        } else this.data?.hentPerson?.right()
             ?: PDLClientError.ResponsManglerPerson.left()
     }
+
     private fun geografiskTilknytning(): GeografiskTilknytning? {
         return data?.hentGeografiskTilknytning
     }
