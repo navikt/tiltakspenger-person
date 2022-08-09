@@ -14,7 +14,7 @@ import no.nav.tiltakspenger.fakta.person.pdl.models.avklarNavn
 import no.nav.tiltakspenger.fakta.person.pdl.models.toBarn
 
 @Serializable
-data class HentPersonRepsonse(
+data class PdlResponseData(
     val hentPerson: PdlPerson?,
     val hentGeografiskTilknytning: GeografiskTilknytning?,
 )
@@ -23,7 +23,7 @@ const val FANT_IKKE_PERSON = "Fant ikke person"
 
 @Serializable
 data class HentPersonResponse(
-    val data: HentPersonRepsonse? = null,
+    val data: PdlResponseData? = null,
     val errors: List<PdlError> = emptyList(),
 ) {
     private fun extractPerson(): Either<PDLClientError, PdlPerson> {
