@@ -16,7 +16,6 @@ allprojects {
     }
     apply(plugin = "io.gitlab.arturbosch.detekt")
     detekt {
-        autoCorrect = true
         buildUponDefaultConfig = true
         allRules = false
         config = files("$rootDir/config/detekt.yml")
@@ -46,6 +45,8 @@ subprojects {
         test {
             // JUnit 5 support
             useJUnitPlatform()
+            // https://phauer.com/2018/best-practices-unit-testing-kotlin/
+            systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
         }
     }
     configurations.all {
