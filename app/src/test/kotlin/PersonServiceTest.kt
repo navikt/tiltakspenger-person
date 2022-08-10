@@ -1,9 +1,10 @@
-
 import arrow.core.right
 import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.time.LocalDate
+import java.time.Month
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonService
 import no.nav.tiltakspenger.fakta.person.domain.models.Barn
@@ -15,8 +16,6 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.time.LocalDate
-import java.time.Month
 
 class PersonServiceTest {
     private fun mockRapid(): Pair<TestRapid, PDLClient> {
@@ -58,7 +57,7 @@ class PersonServiceTest {
             """
             { 
               "@behov": ["Persondata"], 
-              "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
+              "ident": "$ident", 
               "@id": "1", 
               "@behovId": "2"
             }
@@ -66,10 +65,12 @@ class PersonServiceTest {
         )
         coVerify { pdlClient.hentPerson(ident) }
 
+        println(rapid.inspektør.message(0).toString())
         // language=JSON
         JSONAssert.assertEquals(
             """
             {"@løsning": {
+              "Persondata": {
                 "person": {
                     "fornavn": "test",
                     "etternavn":  "testesen",
@@ -89,6 +90,7 @@ class PersonServiceTest {
                 "feil": null
               }
             }
+            }
             """.trimIndent(),
             rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT
         )
@@ -107,8 +109,8 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-                "@behov": ["person"], 
-                "identer": [{"id":"$ident","type":"fnr","historisk":false}], 
+                "@behov": ["Persondata"], 
+                "ident": "$ident", 
                 "@id": "1", 
                 "@behovId": "2", 
                 "@løsning": "hei"

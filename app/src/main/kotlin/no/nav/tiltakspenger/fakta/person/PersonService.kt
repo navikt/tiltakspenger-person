@@ -1,72 +1,73 @@
 package no.nav.tiltakspenger.fakta.person
 
+import arrow.core.getOrHandle
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.slf4j.MDCContext
 import mu.KotlinLogging
+import mu.withLoggingContext
+import net.logstash.logback.argument.StructuredArguments
 import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.helse.rapids_rivers.withMDC
 import no.nav.tiltakspenger.fakta.person.domain.models.Feilmelding
 import no.nav.tiltakspenger.fakta.person.domain.models.Respons
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 
 private val LOG = KotlinLogging.logger {}
+private val SECURELOG = KotlinLogging.logger("tjenestekall")
 
-class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient = PDLClient()) :
-    River.PacketListener {
+class PersonService(
+    rapidsConnection: RapidsConnection,
+    val pdlClient: PDLClient = PDLClient()
+) : River.PacketListener {
+
+    companion object {
+        internal object BEHOV {
+            const val PERSONDATA = "Persondata"
+        }
+    }
 
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAllOrAny("@behov", listOf("Persondata"))
+                it.demandAllOrAny("@behov", listOf(BEHOV.PERSONDATA))
                 it.forbid("@løsning")
                 it.requireKey("@id", "@behovId")
-                it.requireArray("identer") {
-                    requireKey("type", "historisk", "id")
-                }
-                // TODO: Bør skrives om til å motta "ident" som alltid er et fnr, ikke den strukturen vi har her nå.
-                it.require("identer") { identer ->
-                    require(identer.any { ident -> ident["type"].asText() == "fnr" }) { "Mangler fnr i identer" }
-                }
+                it.requireKey("ident")
             }
         }.register(this)
     }
 
     override fun onPacket(packet: JsonMessage, context: MessageContext) {
-        val behovId = packet["@behovId"]
-        withMDC(
-            "behovId" to packet["@behovId"].asText(),
-        ) {
-            val fnr = packet["identer"]
-                .first {
-                    it["type"]
-                        .asText() == "fnr" && !it["historisk"]
-                        .asBoolean()
-                }["id"]
-                .asText()
+        runCatching {
+            loggVedInngang(packet)
 
-            runBlocking {
-                pdlClient.hentPerson(fnr)
+            val respons = withLoggingContext(
+                "id" to packet["@id"].asText(),
+                "behovId" to packet["@behovId"].asText()
+            ) {
+                val fnr = packet["ident"].asText()
+                runBlocking(MDCContext()) {
+                    pdlClient.hentPerson(fnr)
+                }.map { person ->
+                    Respons(person = person)
+                }.getOrHandle { håndterFeil(it) }
             }
-                .mapLeft {
-                    håndterFeil(
-                        clientError = it,
-                        context = context,
-                        packet = packet,
-                    )
-                }
-                .map { person ->
-                    packet["@løsning"] = Respons(person = person)
-                    LOG.info { "Løst behov for behov $behovId" }
-                    context.publish(packet.toJson())
-                }
-        }
+
+            packet["@løsning"] = mapOf(
+                BEHOV.PERSONDATA to respons
+            )
+            loggVedUtgang(packet) { "$respons}" }
+            context.publish(packet.toJson())
+        }.onFailure {
+            loggVedFeil(it, packet)
+        }.getOrThrow()
     }
 
     @Suppress("ThrowsCount", "UseCheckOrError")
-    private fun håndterFeil(clientError: PDLClientError, context: MessageContext, packet: JsonMessage) {
+    private fun håndterFeil(clientError: PDLClientError): Respons {
         when (clientError) {
             is PDLClientError.UkjentFeil -> {
                 LOG.error { clientError.errors }
@@ -91,8 +92,7 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
             PDLClientError.ResponsManglerPerson,
             -> {
                 LOG.error { "Respons fra PDL inneholdt ikke person" }
-                packet["@løsning"] = Respons(feil = Feilmelding.PersonIkkeFunnet)
-                context.publish(packet.toJson())
+                return Respons(feil = Feilmelding.PersonIkkeFunnet)
             }
 
             is PDLClientError.SerializationException -> {
@@ -108,5 +108,47 @@ class PersonService(rapidsConnection: RapidsConnection, val pdlClient: PDLClient
                 throw IllegalStateException("Kunne ikke autentisere mot Azure", clientError.exception)
             }
         }
+    }
+
+    fun loggVedInngang(packet: JsonMessage) {
+        LOG.info(
+            "løser behov med {} og {}",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+        )
+        SECURELOG.info(
+            "løser behov med {} og {}",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+        )
+        SECURELOG.debug { "mottok melding: ${packet.toJson()}" }
+    }
+
+    private fun loggVedUtgang(packet: JsonMessage, løsning: () -> String) {
+        LOG.info(
+            "har løst behov med {} og {}",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+        )
+        SECURELOG.info(
+            "har løst behov med {} og {}",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+        )
+        SECURELOG.debug { "publiserer løsning: $løsning" }
+    }
+
+    private fun loggVedFeil(ex: Throwable, packet: JsonMessage) {
+        LOG.error(
+            "feil ved behandling av behov med {}, se securelogs for detaljer",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
+        )
+        SECURELOG.error(
+            "feil ${ex.message} ved behandling av behov med {} og {}",
+            StructuredArguments.keyValue("id", packet["@id"].asText()),
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
+            ex
+        )
     }
 }
