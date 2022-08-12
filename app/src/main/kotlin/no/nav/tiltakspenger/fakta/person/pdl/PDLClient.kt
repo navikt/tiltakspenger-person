@@ -12,6 +12,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
+import io.ktor.serialization.*
 import kotlinx.serialization.SerializationException
 import no.nav.tiltakspenger.azureAuth.AzureAuthException
 import no.nav.tiltakspenger.azureAuth.OauthConfig
@@ -36,6 +37,7 @@ sealed class PDLClientError {
 }
 
 fun Throwable.toPdlClientError() = when (this) {
+    is JsonConvertException -> PDLClientError.SerializationException(this)
     is SerializationException -> PDLClientError.SerializationException(this)
     is AzureAuthException -> PDLClientError.AzureAuthFailureException(this)
     else -> PDLClientError.NetworkError(this)
