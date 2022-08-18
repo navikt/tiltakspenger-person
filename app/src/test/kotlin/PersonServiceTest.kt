@@ -56,7 +56,7 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-              "@behov": ["Persondata"], 
+              "@behov": ["persondata"], 
               "ident": "$ident", 
               "@id": "1", 
               "@behovId": "2"
@@ -70,7 +70,7 @@ class PersonServiceTest {
         JSONAssert.assertEquals(
             """
             {"@løsning": {
-              "Persondata": {
+              "persondata": {
                 "person": {
                     "fornavn": "test",
                     "etternavn":  "testesen",
@@ -109,7 +109,7 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-                "@behov": ["Persondata"], 
+                "@behov": ["persondata"], 
                 "ident": "$ident", 
                 "@id": "1", 
                 "@behovId": "2", 

@@ -25,7 +25,7 @@ class PersonService(
 
     companion object {
         internal object BEHOV {
-            const val PERSONDATA = "Persondata"
+            const val PERSONDATA = "persondata"
         }
     }
 
