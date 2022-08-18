@@ -136,6 +136,7 @@ class PersonService(
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
         LOG.info { "publiserer løsning: $løsning" }
+        LOG.info { "publiserer løsning: ${packet.toJson()}" }
     }
 
     private fun loggVedFeil(ex: Throwable, packet: JsonMessage) {
