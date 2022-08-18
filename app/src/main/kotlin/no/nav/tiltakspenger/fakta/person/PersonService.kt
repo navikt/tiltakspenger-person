@@ -121,7 +121,7 @@ class PersonService(
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
-        SECURELOG.debug { "mottok melding: ${packet.toJson()}" }
+        LOG.info { "mottok melding: ${packet.toJson()}" }
     }
 
     private fun loggVedUtgang(packet: JsonMessage, løsning: () -> String) {
@@ -135,7 +135,7 @@ class PersonService(
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
-        SECURELOG.debug { "publiserer løsning: $løsning" }
+        LOG.info { "publiserer løsning: $løsning" }
     }
 
     private fun loggVedFeil(ex: Throwable, packet: JsonMessage) {
