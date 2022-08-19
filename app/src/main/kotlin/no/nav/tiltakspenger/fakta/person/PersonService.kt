@@ -59,7 +59,7 @@ class PersonService(
             packet["@løsning"] = mapOf(
                 BEHOV.PERSONDATA to respons
             )
-            loggVedUtgang(packet) { "$respons}" }
+            loggVedUtgang(packet)
             context.publish(packet.toJson())
         }.onFailure {
             loggVedFeil(it, packet)
@@ -124,7 +124,7 @@ class PersonService(
         SECURELOG.debug { "mottok melding: ${packet.toJson()}" }
     }
 
-    private fun loggVedUtgang(packet: JsonMessage, løsning: () -> String) {
+    private fun loggVedUtgang(packet: JsonMessage) {
         LOG.info(
             "har løst behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
@@ -135,7 +135,7 @@ class PersonService(
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
-        SECURELOG.debug { "publiserer løsning: $løsning" }
+        SECURELOG.debug { "publiserer melding: $packet" }
     }
 
     private fun loggVedFeil(ex: Throwable, packet: JsonMessage) {
