@@ -3,7 +3,7 @@ val ktorVersion = "2.1.0"
 val kotlinxSerializationVersion = "1.4.0"
 val graphqlKotlinVersion = "5.3.1"
 val kotestVersion = "5.4.2"
-val mockkVersion = "1.12.5"
+val mockkVersion = "1.12.6"
 
 plugins {
     kotlin("plugin.serialization") version "1.7.10"
