@@ -3,6 +3,7 @@ val ktorVersion = "2.1.0"
 val kotlinxSerializationVersion = "1.4.0"
 val graphqlKotlinVersion = "5.3.1"
 val kotestVersion = "5.4.2"
+val mockkVersion = "1.12.5"
 
 plugins {
     kotlin("plugin.serialization") version "1.7.10"
@@ -41,8 +42,8 @@ dependencies {
     testImplementation("io.kotest:kotest-extensions:$kotestVersion")
     testImplementation(platform("org.junit:junit-bom:5.9.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("io.mockk:mockk:1.12.5")
-    testImplementation("io.mockk:mockk-dsl-jvm:1.12.5")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.mockk:mockk-dsl-jvm:$mockkVersion")
     testImplementation("org.skyscreamer:jsonassert:1.5.1")
 }
 
