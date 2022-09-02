@@ -44,7 +44,7 @@ class PersonService(
         runCatching {
             loggVedInngang(packet)
 
-            val respons = withLoggingContext(
+            val respons: Respons = withLoggingContext(
                 "id" to packet["@id"].asText(),
                 "behovId" to packet["@behovId"].asText()
             ) {
