@@ -6,7 +6,7 @@ import io.mockk.mockk
 import java.time.LocalDate
 import java.time.Month
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
-import no.nav.tiltakspenger.fakta.person.PersonService
+import no.nav.tiltakspenger.fakta.person.PersonopplysningerService
 import no.nav.tiltakspenger.fakta.person.domain.models.Barn
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 
-class PersonServiceTest {
+class PersonopplysningerServiceTest {
     private fun mockRapid(): Pair<TestRapid, PDLClient> {
         val person = Person(
             barn = listOf(
@@ -40,7 +40,7 @@ class PersonServiceTest {
 
         val rapid = TestRapid()
         val pdlClient = mockk<PDLClient>()
-        PersonService(
+        PersonopplysningerService(
             rapidsConnection = rapid,
             pdlClient = pdlClient
         )
@@ -56,7 +56,7 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-              "@behov": ["persondata"], 
+              "@behov": ["personopplysninger"], 
               "ident": "$ident", 
               "@id": "1", 
               "@behovId": "2"
@@ -70,7 +70,7 @@ class PersonServiceTest {
         JSONAssert.assertEquals(
             """
             {"@løsning": {
-              "persondata": {
+              "personopplysninger": {
                 "person": {
                     "fornavn": "test",
                     "etternavn":  "testesen",
@@ -109,7 +109,7 @@ class PersonServiceTest {
         rapid.sendTestMessage(
             """
             { 
-                "@behov": ["persondata"], 
+                "@behov": ["personopplysninger"], 
                 "ident": "$ident", 
                 "@id": "1", 
                 "@behovId": "2", 

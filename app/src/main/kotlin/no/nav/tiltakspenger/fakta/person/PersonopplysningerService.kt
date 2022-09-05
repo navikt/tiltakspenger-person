@@ -18,21 +18,21 @@ import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 private val LOG = KotlinLogging.logger {}
 private val SECURELOG = KotlinLogging.logger("tjenestekall")
 
-class PersonService(
+class PersonopplysningerService(
     rapidsConnection: RapidsConnection,
     val pdlClient: PDLClient = PDLClient()
 ) : River.PacketListener {
 
     companion object {
         internal object BEHOV {
-            const val PERSONDATA = "persondata"
+            const val PERSONOPPLYSNINGER = "personopplysninger"
         }
     }
 
     init {
         River(rapidsConnection).apply {
             validate {
-                it.demandAllOrAny("@behov", listOf(BEHOV.PERSONDATA))
+                it.demandAllOrAny("@behov", listOf(BEHOV.PERSONOPPLYSNINGER))
                 it.forbid("@løsning")
                 it.requireKey("@id", "@behovId")
                 it.requireKey("ident")
@@ -57,7 +57,7 @@ class PersonService(
             }
 
             packet["@løsning"] = mapOf(
-                BEHOV.PERSONDATA to respons
+                BEHOV.PERSONOPPLYSNINGER to respons
             )
             loggVedUtgang(packet)
             context.publish(packet.toJson())
@@ -140,12 +140,12 @@ class PersonService(
 
     private fun loggVedFeil(ex: Throwable, packet: JsonMessage) {
         LOG.error(
-            "feil ved behandling av behov med {}, se securelogs for detaljer",
+            "feil ved behandling av behov med id {} og behovId {}, se securelogs for detaljer",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
         )
         SECURELOG.error(
-            "feil ${ex.message} ved behandling av behov med {} og {}",
+            "feil ${ex.message} ved behandling av behov med id {} og behovId {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
             ex

@@ -16,6 +16,6 @@ fun main() {
     log.info { "Starting tiltakspenger-fakta-person" }
     RapidApplication.create(Configuration.asMap())
         .also {
-            PersonService(it)
+            PersonopplysningerService(it)
         }.start()
 }
