@@ -1,4 +1,4 @@
-package no.nav.tiltakspenger.fakta.person.seralizers
+package no.nav.tiltakspenger.fakta.person.serializers
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind

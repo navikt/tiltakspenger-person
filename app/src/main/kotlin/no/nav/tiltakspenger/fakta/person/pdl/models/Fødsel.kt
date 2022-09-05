@@ -1,7 +1,7 @@
 package no.nav.tiltakspenger.fakta.person.pdl.models
 
 import kotlinx.serialization.Serializable
-import no.nav.tiltakspenger.fakta.person.seralizers.LocalDateSerializer
+import no.nav.tiltakspenger.fakta.person.serializers.LocalDateSerializer
 import java.time.LocalDate
 
 @Serializable
