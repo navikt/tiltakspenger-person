@@ -17,7 +17,7 @@ dependencies {
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(kotlin("stdlib"))
-    implementation("com.github.navikt:rapids-and-rivers:2022072721371658950659.c1e8f7bf35c6")
+    implementation("com.github.navikt:rapids-and-rivers:2022082414021661342533.46a423f6c163")
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.6.4")
 
