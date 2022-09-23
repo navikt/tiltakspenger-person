@@ -1,4 +1,6 @@
 
+import arrow.core.getOrHandle
+import arrow.core.right
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.fail
@@ -14,9 +16,13 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.io.File
 
 class PDLClientTest {
 
@@ -40,6 +46,17 @@ class PDLClientTest {
         runBlocking {
             pdlClient.hentPerson("test")
         }.shouldBeRight()
+    }
+
+    @Test
+    fun `serialisering av barn med manglende ident`() {
+        val response = File("src/test/resources/pdlResponseManglendeIdentPåBarn.json").readText()
+        val pdlClient = PDLClient(mockClient(response))
+
+        runBlocking {
+            val person = pdlClient.hentPerson("test").getOrHandle { } as Person
+            assertNotNull(person.barn)
+        }
     }
 
     @Test
