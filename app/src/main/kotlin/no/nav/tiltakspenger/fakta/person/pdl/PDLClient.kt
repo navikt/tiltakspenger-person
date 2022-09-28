@@ -6,13 +6,11 @@ import arrow.core.left
 import arrow.core.right
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.*
 import kotlinx.serialization.SerializationException
 import no.nav.tiltakspenger.azureAuth.AzureAuthException
-import no.nav.tiltakspenger.azureAuth.AzureTokenProvider
 import no.nav.tiltakspenger.azureAuth.OauthConfig
 import no.nav.tiltakspenger.azureAuth.azureClient
 import no.nav.tiltakspenger.fakta.person.Configuration
@@ -51,15 +49,11 @@ class PDLClient(
         ),
     ),
 ) {
-    private val tokenProvider: AzureTokenProvider =
-        AzureTokenProvider(OauthConfig.fromEnv(scope = Configuration.getPdlScope()), CIO.create())
-
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {
             client.post(url) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
-                bearerAuth(tokenProvider.getToken())
                 contentType(ContentType.Application.Json)
                 setBody(hentPersonQuery(ident))
             }.body<HentPersonResponse>()
