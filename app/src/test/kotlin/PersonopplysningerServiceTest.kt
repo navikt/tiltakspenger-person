@@ -3,31 +3,34 @@ import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import java.time.LocalDate
-import java.time.Month
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
 import no.nav.tiltakspenger.fakta.person.PersonopplysningerService
-import no.nav.tiltakspenger.fakta.person.domain.models.Barn
+import no.nav.tiltakspenger.fakta.person.domain.models.BarnIFolkeregisteret
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
-import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
+import no.nav.tiltakspenger.fakta.person.pdl.PDLService
 import no.nav.tiltakspenger.fakta.person.pdl.models.AdressebeskyttelseGradering
 import no.nav.tiltakspenger.fakta.person.pdl.query
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
+import java.time.LocalDate
+import java.time.Month
 
 class PersonopplysningerServiceTest {
-    private fun mockRapid(): Pair<TestRapid, PDLClient> {
+    private fun mockRapid(): Pair<TestRapid, PDLService> {
         val person = Person(
             barn = listOf(
-                Barn(
+                BarnIFolkeregisteret(
+                    ident = "ident",
                     fornavn = "test",
                     etternavn = "testesen",
                     mellomnavn = null,
-                    fødselsdato = LocalDate.of(2022, Month.JUNE, 21)
+                    fødselsdato = LocalDate.of(2022, Month.JUNE, 21),
+                    adressebeskyttelseGradering = AdressebeskyttelseGradering.UGRADERT
                 )
             ),
+            barnUtenFolkeregisteridentifikator = emptyList(),
             fødselsdato = LocalDate.of(2020, Month.APRIL, 10),
             fornavn = "test",
             mellomnavn = null,
@@ -39,13 +42,13 @@ class PersonopplysningerServiceTest {
         )
 
         val rapid = TestRapid()
-        val pdlClient = mockk<PDLClient>()
+        val pdlService = mockk<PDLService>()
         PersonopplysningerService(
             rapidsConnection = rapid,
-            pdlClient = pdlClient
+            pdlService = pdlService
         )
-        coEvery { pdlClient.hentPerson(any()) } returns person.right()
-        return Pair(rapid, pdlClient)
+        coEvery { pdlService.hentPerson(any()) } returns person.right()
+        return Pair(rapid, pdlService)
     }
 
     @Test

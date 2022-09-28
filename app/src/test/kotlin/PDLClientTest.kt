@@ -1,28 +1,24 @@
-
 import arrow.core.getOrHandle
-import arrow.core.right
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.fail
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.headersOf
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.*
+import io.ktor.client.engine.mock.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.io.File
+import java.time.LocalDate
 
 class PDLClientTest {
 
@@ -54,8 +50,17 @@ class PDLClientTest {
         val pdlClient = PDLClient(mockClient(response))
 
         runBlocking {
-            val person = pdlClient.hentPerson("test").getOrHandle { } as Person
-            assertNotNull(person.barn)
+            val pair = pdlClient.hentPerson("test").getOrHandle { }
+            pair should beInstanceOf<Pair<Person, List<String>>>()
+            val person = (pair as Pair<Person, List<String>>).first
+            val barnsIdenter = pair.second
+            barnsIdenter.size shouldBe 0
+            person.barnUtenFolkeregisteridentifikator.size shouldBe 1
+            person.barnUtenFolkeregisteridentifikator.first().fornavn shouldBe "Geometrisk"
+            person.barnUtenFolkeregisteridentifikator.first().mellomnavn shouldBe "Sprudlende"
+            person.barnUtenFolkeregisteridentifikator.first().etternavn shouldBe "Jakt"
+            person.barnUtenFolkeregisteridentifikator.first().fødselsdato shouldBe LocalDate.of(2016, 5, 23)
+            person.barnUtenFolkeregisteridentifikator.first().statsborgerskap shouldBe "BHS"
         }
     }
 

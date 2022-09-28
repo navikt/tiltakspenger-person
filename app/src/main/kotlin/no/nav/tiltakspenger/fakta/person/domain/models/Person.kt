@@ -4,13 +4,14 @@ import no.nav.tiltakspenger.fakta.person.pdl.models.AdressebeskyttelseGradering
 import java.time.LocalDate
 
 data class Person(
-    val fødselsdato: LocalDate?,
-    val fornavn: String,
-    val mellomnavn: String?,
-    val etternavn: String,
-    val adressebeskyttelseGradering: AdressebeskyttelseGradering?,
+    override val fødselsdato: LocalDate,
+    override val fornavn: String,
+    override val mellomnavn: String?,
+    override val etternavn: String,
+    override val adressebeskyttelseGradering: AdressebeskyttelseGradering,
     val gtKommune: String?,
     val gtBydel: String?,
     val gtLand: String?,
-    val barn: List<Barn>,
-)
+    val barn: List<BarnIFolkeregisteret>,
+    val barnUtenFolkeregisteridentifikator: List<BarnUtenFolkeregisteridentifikator>,
+) : Personopplysninger

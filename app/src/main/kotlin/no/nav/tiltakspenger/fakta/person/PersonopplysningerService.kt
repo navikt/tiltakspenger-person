@@ -12,15 +12,15 @@ import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
 import no.nav.tiltakspenger.fakta.person.domain.models.Feilmelding
 import no.nav.tiltakspenger.fakta.person.domain.models.Respons
-import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
+import no.nav.tiltakspenger.fakta.person.pdl.PDLService
 
 private val LOG = KotlinLogging.logger {}
 private val SECURELOG = KotlinLogging.logger("tjenestekall")
 
 class PersonopplysningerService(
     rapidsConnection: RapidsConnection,
-    val pdlClient: PDLClient = PDLClient()
+    val pdlService: PDLService = PDLService()
 ) : River.PacketListener {
 
     companion object {
@@ -50,7 +50,7 @@ class PersonopplysningerService(
             ) {
                 val fnr = packet["ident"].asText()
                 runBlocking(MDCContext()) {
-                    pdlClient.hentPerson(fnr)
+                    pdlService.hentPerson(fnr)
                 }.map { person ->
                     Respons(person = person)
                 }.getOrHandle { håndterFeil(it) }
@@ -77,6 +77,16 @@ class PersonopplysningerService(
             PDLClientError.NavnKunneIkkeAvklares -> {
                 LOG.error { "Navn kunne ikke avklares, DETTE SKAL IKKE SKJE" }
                 throw IllegalStateException("Navn kunne ikke avklares")
+            }
+
+            PDLClientError.FødselKunneIkkeAvklares -> {
+                LOG.error { "Fødsel kunne ikke avklares, DETTE SKAL IKKE SKJE" }
+                throw IllegalStateException("Fødsel kunne ikke avklares")
+            }
+
+            PDLClientError.AdressebeskyttelseKunneIkkeAvklares -> {
+                LOG.error { "Adressebeskyttelse kunne ikke avklares, DETTE SKAL IKKE SKJE" }
+                throw IllegalStateException("Adressebeskyttelse kunne ikke avklares")
             }
 
             is PDLClientError.NetworkError -> {

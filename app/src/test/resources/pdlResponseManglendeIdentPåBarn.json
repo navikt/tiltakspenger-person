@@ -14,7 +14,16 @@
           "relatertPersonsIdent": null,
           "relatertPersonsRolle": "BARN",
           "minRolleForPerson": "MOR",
-          "relatertPersonUtenFolkeregisteridentifikator": null,
+          "relatertPersonUtenFolkeregisteridentifikator": {
+            "navn": {
+              "fornavn": "Geometrisk",
+              "mellomnavn": "Sprudlende",
+              "etternavn": "Jakt"
+            },
+            "foedselsdato": "2016-05-23",
+            "statsborgerskap": "BHS",
+            "kjoenn": "MANN"
+          },
           "folkeregistermetadata": {
             "aarsak": null,
             "ajourholdstidspunkt": "2022-06-17T09:32:16",

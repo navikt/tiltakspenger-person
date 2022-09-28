@@ -1,10 +1,9 @@
 package no.nav.tiltakspenger.fakta.person.pdl.models
 
 import kotlinx.serialization.Serializable
-import no.nav.tiltakspenger.fakta.person.domain.models.Barn
+import no.nav.tiltakspenger.fakta.person.domain.models.BarnUtenFolkeregisteridentifikator
 import no.nav.tiltakspenger.fakta.person.serializers.LocalDateSerializer
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Serializable
 enum class ForelderBarnRelasjonRolle {
@@ -47,21 +46,31 @@ data class ForelderBarnRelasjon(
     override val metadata: EndringsMetadata
 ) : Changeable
 
-fun List<ForelderBarnRelasjon>.toBarn(): List<Barn> {
+fun List<ForelderBarnRelasjon>.toIdenterForBarnIFolkeregisteret(): List<String> {
     return this
+        .asSequence()
         .filter { it.relatertPersonsRolle == ForelderBarnRelasjonRolle.BARN }
-        .groupBy { it.relatertPersonsIdent }
-        .mapNotNull { (_, barn) ->
-            barn.maxByOrNull { getEndringstidspunktOrNull(it) ?: LocalDateTime.MIN }
-        }
+        .mapNotNull { it.relatertPersonsIdent }
+        .distinct()
+        .map { it }
+        .toList()
+}
+
+fun List<ForelderBarnRelasjon>.toBarnUtenforFolkeregisteret(): List<BarnUtenFolkeregisteridentifikator> {
+    return this
+        .asSequence()
+        .filter { it.relatertPersonsRolle == ForelderBarnRelasjonRolle.BARN }
+        .filter { it.relatertPersonUtenFolkeregisteridentifikator != null }
         .map {
-            val barn = it.relatertPersonUtenFolkeregisteridentifikator
-            val navn = barn?.navn
-            Barn(
+            val barn = it.relatertPersonUtenFolkeregisteridentifikator!!
+            val navn = barn.navn
+            BarnUtenFolkeregisteridentifikator(
                 fornavn = navn?.fornavn,
-                mellomnavn = navn?.fornavn,
-                etternavn = navn?.fornavn,
-                fødselsdato = barn?.foedselsdato
+                mellomnavn = navn?.mellomnavn,
+                etternavn = navn?.etternavn,
+                fødselsdato = barn.foedselsdato,
+                statsborgerskap = barn.statsborgerskap
             )
         }
+        .toList()
 }
