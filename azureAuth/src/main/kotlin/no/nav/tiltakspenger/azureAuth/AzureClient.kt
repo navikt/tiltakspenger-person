@@ -3,8 +3,6 @@ package no.nav.tiltakspenger.azureAuth
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -18,6 +16,7 @@ fun azureClient(
     return HttpClient(engine) {
         expectSuccess = true
         install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
+        /*
         install(Auth) {
             bearer {
                 loadTokens {
@@ -30,6 +29,7 @@ fun azureClient(
                 }
             }
         }
+         */
         apply(configBlock)
     }
 }
