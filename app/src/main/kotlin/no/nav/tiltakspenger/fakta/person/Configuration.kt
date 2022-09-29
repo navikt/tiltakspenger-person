@@ -63,7 +63,7 @@ internal object Configuration {
     }
 
     fun oauthConfig(
-        scope: String = config()[Key("skjermingScope", stringType)],
+        scope: String = config()[Key("pdlScope", stringType)],
         clientId: String = config()[Key("AZURE_APP_CLIENT_ID", stringType)],
         clientSecret: String = config()[Key("AZURE_APP_CLIENT_SECRET", stringType)],
         wellknownUrl: String = config()[Key("AZURE_APP_WELL_KNOWN_URL", stringType)]
@@ -76,7 +76,7 @@ internal object Configuration {
 
     fun pdlKlientConfig(baseUrl: String = config()[Key("pdlBaseUrl", stringType)]) =
         PDLClient.PdlKlientConfig(baseUrl = baseUrl)
-    
+
 }
 
 enum class Profile {
