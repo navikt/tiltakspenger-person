@@ -12,7 +12,6 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.*
-import kotlinx.serialization.SerializationException
 import no.nav.tiltakspenger.fakta.person.Configuration
 import no.nav.tiltakspenger.fakta.person.auth.AzureTokenProvider.AzureAuthException
 import no.nav.tiltakspenger.fakta.person.defaultHttpClient
@@ -38,7 +37,6 @@ sealed class PDLClientError {
 
 fun Throwable.toPdlClientError() = when (this) {
     is JsonConvertException -> PDLClientError.SerializationException(this)
-    is SerializationException -> PDLClientError.SerializationException(this)
     is AzureAuthException -> PDLClientError.AzureAuthFailureException(this)
     else -> PDLClientError.NetworkError(this)
 }
