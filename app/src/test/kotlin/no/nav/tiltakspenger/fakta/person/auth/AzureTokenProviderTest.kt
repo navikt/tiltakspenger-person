@@ -1,25 +1,21 @@
+package no.nav.tiltakspenger.fakta.person.auth
 
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.client.request.get
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
+
+import io.ktor.client.engine.mock.*
+import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import no.nav.tiltakspenger.azureAuth.OauthConfig
-import no.nav.tiltakspenger.azureAuth.azureClient
+import no.nav.tiltakspenger.fakta.person.defaultObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class AzureClientTest {
+@Suppress("TooGenericExceptionThrown")
+internal class AzureTokenProviderTest {
 
     @Test
-    fun `should send requests with provided access token`() {
+    fun `skal gjøre to kall mot Azure og returnere token`() {
         val wellKnownUrl = "https://localhost/wellwellwell"
         val tokenEndpoint = "http://localhost/token"
         val accessToken = "abc"
-        var actualAuthHeader: String? = null
         val mockEngine = MockEngine { request ->
             when (request.url.toString()) {
                 wellKnownUrl -> respond(
@@ -37,29 +33,24 @@ class AzureClientTest {
                     status = HttpStatusCode.OK,
                     headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 )
-                else -> {
-                    actualAuthHeader = request.headers["Authorization"]
-                    respond(
-                        content = """{ "token_endpoint": "http://localhost/well-known" }""",
-                        status = HttpStatusCode.OK,
-                        headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
-                    )
-                }
+                else -> throw RuntimeException("Should not happen")
             }
         }
 
-        val client = azureClient(
-            OauthConfig(
+        val tokenProvider = AzureTokenProvider(
+            objectMapper = defaultObjectMapper(),
+            engine = mockEngine,
+            config = AzureTokenProvider.OauthConfig(
                 wellknownUrl = wellKnownUrl,
                 clientSecret = "opensecret",
                 clientId = "id",
                 scope = "scope"
-            ),
-            mockEngine
+            )
         )
-        runBlocking {
-            client.get("http://localhost:8080/test")
+
+        val token: String = runBlocking {
+            tokenProvider.getToken()
         }
-        assertEquals(actualAuthHeader, "Bearer $accessToken")
+        assertEquals(accessToken, token)
     }
 }

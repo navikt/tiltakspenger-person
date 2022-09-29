@@ -20,7 +20,7 @@ private val SECURELOG = KotlinLogging.logger("tjenestekall")
 
 class PersonopplysningerService(
     rapidsConnection: RapidsConnection,
-    val pdlService: PDLService = PDLService()
+    val pdlService: PDLService
 ) : River.PacketListener {
 
     companion object {

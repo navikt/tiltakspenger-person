@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 
-class PDLService(private val pdlClient: PDLClient = PDLClient()) {
+class PDLService(private val pdlClient: PDLClient) {
 
     suspend fun hentPerson(ident: String): Either<PDLClientError, Person> {
         return pdlClient.hentPerson(ident).map { (person, barnsIdenter) ->

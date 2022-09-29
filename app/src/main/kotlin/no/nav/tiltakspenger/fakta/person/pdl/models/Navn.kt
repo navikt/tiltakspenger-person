@@ -3,10 +3,8 @@ package no.nav.tiltakspenger.fakta.person.pdl.models
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import kotlinx.serialization.Serializable
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
 
-@Serializable
 data class Navn(
     val fornavn: String,
     val etternavn: String,

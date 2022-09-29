@@ -4,21 +4,22 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
+import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.*
 import kotlinx.serialization.SerializationException
-import no.nav.tiltakspenger.azureAuth.AzureAuthException
-import no.nav.tiltakspenger.azureAuth.OauthConfig
-import no.nav.tiltakspenger.azureAuth.azureClient
 import no.nav.tiltakspenger.fakta.person.Configuration
-import no.nav.tiltakspenger.fakta.person.Configuration.getPDLUrl
+import no.nav.tiltakspenger.fakta.person.auth.AzureTokenProvider.AzureAuthException
+import no.nav.tiltakspenger.fakta.person.defaultHttpClient
+import no.nav.tiltakspenger.fakta.person.defaultObjectMapper
 import no.nav.tiltakspenger.fakta.person.domain.models.BarnIFolkeregisteret
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 
-val url = getPDLUrl()
 const val INDIVIDSTONAD = "IND"
 
 sealed class PDLClientError {
@@ -43,17 +44,21 @@ fun Throwable.toPdlClientError() = when (this) {
 }
 
 class PDLClient(
-    private val client: HttpClient = azureClient(
-        OauthConfig.fromEnv(
-            scope = Configuration.getPdlScope(),
-        ),
-    ),
+    private val pdlKlientConfig: PdlKlientConfig = Configuration.pdlKlientConfig(),
+    private val objectMapper: ObjectMapper = defaultObjectMapper(),
+    private val getToken: suspend () -> String,
+    engine: HttpClientEngine = CIO.create(),
+    private val httpClient: HttpClient = defaultHttpClient(
+        objectMapper = objectMapper,
+        engine = engine
+    ) {}
 ) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {
-            client.post(url) {
+            httpClient.post(pdlKlientConfig.baseUrl) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
+                bearerAuth(getToken())
                 contentType(ContentType.Application.Json)
                 setBody(hentPersonQuery(ident))
             }.body<HentPersonResponse>()
@@ -77,4 +82,8 @@ class PDLClient(
             response.toBarn(ident).bind()
         }
     }
+
+    data class PdlKlientConfig(
+        val baseUrl: String,
+    )
 }

@@ -6,13 +6,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.ktor.client.*
 import io.ktor.client.engine.mock.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
+import no.nav.tiltakspenger.fakta.person.defaultObjectMapper
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClient
 import no.nav.tiltakspenger.fakta.person.pdl.PDLClientError
@@ -22,22 +19,28 @@ import java.time.LocalDate
 
 class PDLClientTest {
 
-    private fun mockClient(response: String): HttpClient {
-        val mockEngine = MockEngine {
+    companion object {
+        const val accessToken = "woopwoop"
+    }
+
+    private fun mockEngine(response: String): MockEngine {
+        return MockEngine {
             respond(
                 content = response,
                 headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
             )
-        }
-        return HttpClient(mockEngine) {
-            install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) }
         }
     }
 
     @Test
     fun `should be able to serialize non-errors`() {
         val response = this::class.java.getResource("pdlResponse.json").readText()
-        val pdlClient = PDLClient(mockClient(response))
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            objectMapper = defaultObjectMapper(),
+            getToken = { accessToken },
+            engine = mockEngine(response)
+        )
 
         runBlocking {
             pdlClient.hentPerson("test")
@@ -47,7 +50,12 @@ class PDLClientTest {
     @Test
     fun `serialisering av barn med manglende ident`() {
         val response = File("src/test/resources/pdlResponseManglendeIdentPåBarn.json").readText()
-        val pdlClient = PDLClient(mockClient(response))
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            objectMapper = defaultObjectMapper(),
+            getToken = { accessToken },
+            engine = mockEngine(response)
+        )
 
         runBlocking {
             val pair = pdlClient.hentPerson("test").getOrHandle { }
@@ -67,7 +75,12 @@ class PDLClientTest {
     @Test
     fun `should be able to serialize errors`() {
         val response = this::class.java.getResource("pdlErrorResponse.json").readText()
-        val pdlClient = PDLClient(mockClient(response))
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            objectMapper = defaultObjectMapper(),
+            getToken = { accessToken },
+            engine = mockEngine(response)
+        )
 
         runBlocking {
             pdlClient.hentPerson("test")
@@ -76,7 +89,13 @@ class PDLClientTest {
 
     @Test
     fun `should handle `() {
-        val pdlClient = PDLClient(mockClient("""{ "lol": "lal" }"""))
+        val response = """{ "lol": "lal" }"""
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            objectMapper = defaultObjectMapper(),
+            getToken = { accessToken },
+            engine = mockEngine(response)
+        )
 
         runBlocking {
             pdlClient.hentPerson("test")
@@ -87,7 +106,13 @@ class PDLClientTest {
 
     @Test
     fun `should map invalid json to serialization`() {
-        val pdlClient = PDLClient(mockClient("""asd{ "lol": "lal" }"""))
+        val response = """asd{ "lol": "lal" }"""
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            objectMapper = defaultObjectMapper(),
+            getToken = { accessToken },
+            engine = mockEngine(response)
+        )
 
         runBlocking {
             pdlClient.hentPerson("test")

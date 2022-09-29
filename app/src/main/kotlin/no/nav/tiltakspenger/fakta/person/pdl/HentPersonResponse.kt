@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
-import kotlinx.serialization.Serializable
 import no.nav.tiltakspenger.fakta.person.domain.models.BarnIFolkeregisteret
 import no.nav.tiltakspenger.fakta.person.domain.models.Person
 import no.nav.tiltakspenger.fakta.person.pdl.models.GeografiskTilknytning
@@ -15,7 +14,6 @@ import no.nav.tiltakspenger.fakta.person.pdl.models.avklarNavn
 import no.nav.tiltakspenger.fakta.person.pdl.models.toBarnUtenforFolkeregisteret
 import no.nav.tiltakspenger.fakta.person.pdl.models.toIdenterForBarnIFolkeregisteret
 
-@Serializable
 data class PdlResponseData(
     val hentPerson: PdlPerson?,
     val hentGeografiskTilknytning: GeografiskTilknytning?,
@@ -23,7 +21,6 @@ data class PdlResponseData(
 
 const val FANT_IKKE_PERSON = "Fant ikke person"
 
-@Serializable
 data class HentPersonResponse(
     val data: PdlResponseData? = null,
     val errors: List<PdlError> = emptyList(),
