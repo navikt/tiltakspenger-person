@@ -4,7 +4,7 @@ val kotlinxSerializationVersion = "1.4.0"
 val graphqlKotlinVersion = "5.3.1"
 val kotestVersion = "5.4.2"
 val jacksonVersion = "2.13.4"
-val mockkVersion = "1.13.1"
+val mockkVersion = "1.13.2"
 
 plugins {
     kotlin("plugin.serialization") version "1.7.10"
