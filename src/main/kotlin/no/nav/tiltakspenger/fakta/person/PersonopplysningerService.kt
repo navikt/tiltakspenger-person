@@ -44,23 +44,23 @@ class PersonopplysningerService(
         runCatching {
             loggVedInngang(packet)
 
-            val respons: Respons = withLoggingContext(
+            withLoggingContext(
                 "id" to packet["@id"].asText(),
                 "behovId" to packet["@behovId"].asText()
             ) {
-                val fnr = packet["ident"].asText()
-                runBlocking(MDCContext()) {
-                    pdlService.hentPerson(fnr)
+                val ident = packet["ident"].asText()
+                val respons: Respons = runBlocking(MDCContext()) {
+                    pdlService.hentPerson(ident)
                 }.map { person ->
                     Respons(person = person)
                 }.getOrHandle { håndterFeil(it) }
-            }
 
-            packet["@løsning"] = mapOf(
-                BEHOV.PERSONOPPLYSNINGER to respons
-            )
-            loggVedUtgang(packet)
-            context.publish(packet.toJson())
+                packet["@løsning"] = mapOf(
+                    BEHOV.PERSONOPPLYSNINGER to respons
+                )
+                loggVedUtgang(packet)
+                context.publish(ident, packet.toJson())
+            }
         }.onFailure {
             loggVedFeil(it, packet)
         }.getOrThrow()
