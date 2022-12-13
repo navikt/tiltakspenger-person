@@ -1,4 +1,4 @@
-tiltakspenger-fakta-person
+tiltakspenger-person
 ================
 Løser behov for tiltakspenger-vedtak.
 
