@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.util.DefaultIndenter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.engine.cio.*
@@ -25,7 +24,6 @@ fun httpClientGeneric(engine: HttpClientEngine) = HttpClient(engine).medDefaultC
 private fun HttpClient.medDefaultConfig() = this.config {
     install(ContentNegotiation) {
         jackson {
-            registerModule(KotlinModule.Builder().build())
             registerModule(JavaTimeModule())
             setDefaultPrettyPrinter(
                 DefaultPrettyPrinter().apply {
@@ -42,7 +40,7 @@ private fun HttpClient.medDefaultConfig() = this.config {
         socketTimeoutMillis = Duration.ofSeconds(SIXTY_SECONDS).toMillis()
     }
 
-    this.install(Logging) {
+    install(Logging) {
         logger = object : Logger {
             override fun log(message: String) {
                 LOG.info("HttpClient detaljer logget til securelog")
@@ -51,5 +49,5 @@ private fun HttpClient.medDefaultConfig() = this.config {
         }
         level = LogLevel.ALL
     }
-    this.expectSuccess = true
+    expectSuccess = true
 }
