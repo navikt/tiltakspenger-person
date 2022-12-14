@@ -39,7 +39,6 @@ internal class NavnTest {
                 )
             )
         )
-
         assertTrue(avklartNavn.isLeft())
         assertEquals(PDLClientError.NavnKunneIkkeAvklares.left(), avklartNavn)
     }
@@ -73,7 +72,6 @@ internal class NavnTest {
         val avklartNavn = avklarNavn(
             listOf(navn)
         )
-
         assertEquals(navn.right(), avklartNavn)
     }
 }

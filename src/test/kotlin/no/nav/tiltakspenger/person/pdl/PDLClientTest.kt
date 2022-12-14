@@ -11,10 +11,9 @@ import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import no.nav.tiltakspenger.person.defaultObjectMapper
 import no.nav.tiltakspenger.person.domain.models.Person
+import no.nav.tiltakspenger.person.httpClientGeneric
 import org.junit.jupiter.api.Test
-import java.io.File
 import java.time.LocalDate
 
 class PDLClientTest {
@@ -37,9 +36,8 @@ class PDLClientTest {
         val response = this::class.java.getResource("/pdlResponse.json").readText()
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
-            objectMapper = defaultObjectMapper(),
             getToken = { accessToken },
-            engine = mockEngine(response)
+            httpClient = httpClientGeneric(mockEngine(response))
         )
 
         runBlocking {
@@ -52,9 +50,8 @@ class PDLClientTest {
         val response = this::class.java.getResource("/pdlResponseManglendeIdentPåBarn.json").readText()
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
-            objectMapper = defaultObjectMapper(),
             getToken = { accessToken },
-            engine = mockEngine(response)
+            httpClient = httpClientGeneric(mockEngine(response))
         )
 
         runBlocking {
@@ -77,9 +74,8 @@ class PDLClientTest {
         val response = this::class.java.getResource("/pdlErrorResponse.json").readText()
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
-            objectMapper = defaultObjectMapper(),
             getToken = { accessToken },
-            engine = mockEngine(response)
+            httpClient = httpClientGeneric(mockEngine(response))
         )
 
         runBlocking {
@@ -92,9 +88,8 @@ class PDLClientTest {
         val response = """{ "lol": "lal" }"""
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
-            objectMapper = defaultObjectMapper(),
             getToken = { accessToken },
-            engine = mockEngine(response)
+            httpClient = httpClientGeneric(mockEngine(response))
         )
 
         runBlocking {
@@ -109,9 +104,8 @@ class PDLClientTest {
         val response = """asd{ "lol": "lal" }"""
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
-            objectMapper = defaultObjectMapper(),
             getToken = { accessToken },
-            engine = mockEngine(response)
+            httpClient = httpClientGeneric(mockEngine(response))
         )
 
         runBlocking {

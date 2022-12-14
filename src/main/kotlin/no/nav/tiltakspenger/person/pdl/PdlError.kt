@@ -1,6 +1,5 @@
 package no.nav.tiltakspenger.person.pdl
 
-
 data class PdlError(
     val message: String,
     val locations: List<PdlErrorLocation>,

@@ -3,7 +3,7 @@ package no.nav.tiltakspenger.person.auth
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import no.nav.tiltakspenger.person.defaultObjectMapper
+import no.nav.tiltakspenger.person.httpClientGeneric
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
@@ -37,8 +37,7 @@ internal class AzureTokenProviderTest {
         }
 
         val tokenProvider = AzureTokenProvider(
-            objectMapper = defaultObjectMapper(),
-            engine = mockEngine,
+            httpClient = httpClientGeneric(mockEngine),
             config = AzureTokenProvider.OauthConfig(
                 wellknownUrl = wellKnownUrl,
                 clientSecret = "opensecret",

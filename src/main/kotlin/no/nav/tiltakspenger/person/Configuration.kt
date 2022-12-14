@@ -76,7 +76,6 @@ internal object Configuration {
 
     fun pdlKlientConfig(baseUrl: String = config()[Key("pdlBaseUrl", stringType)]) =
         PDLClient.PdlKlientConfig(baseUrl = baseUrl)
-
 }
 
 enum class Profile {

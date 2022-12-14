@@ -8,6 +8,7 @@ plugins {
     application
     kotlin("jvm") version "1.7.22"
     id("io.gitlab.arturbosch.detekt") version "1.22.0"
+    id("ca.cutterslade.analyze") version "1.9.0"
 }
 
 repositories {
@@ -38,7 +39,6 @@ dependencies {
     implementation("io.ktor:ktor-utils-jvm:$ktorVersion")
     implementation("io.ktor:ktor-http-jvm:$ktorVersion")
     implementation("io.ktor:ktor-client-logging-jvm:$ktorVersion")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
     implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
@@ -91,6 +91,14 @@ tasks {
         useJUnitPlatform()
         // https://phauer.com/2018/best-practices-unit-testing-kotlin/
         systemProperty("junit.jupiter.testinstance.lifecycle.default", "per_class")
+    }
+    analyzeClassesDependencies {
+        warnUsedUndeclared = true
+        warnUnusedDeclared = true
+    }
+    analyzeTestClassesDependencies {
+        warnUsedUndeclared = true
+        warnUnusedDeclared = true
     }
 }
 

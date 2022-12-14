@@ -3,7 +3,6 @@ package no.nav.tiltakspenger.person
 import com.fasterxml.jackson.core.util.DefaultIndenter
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter
 import com.fasterxml.jackson.databind.DeserializationFeature
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import io.ktor.client.*
@@ -12,7 +11,6 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
-import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import mu.KotlinLogging
 import java.time.Duration
@@ -21,27 +19,22 @@ private val LOG = KotlinLogging.logger {}
 private val SECURELOG = KotlinLogging.logger("tjenestekall")
 private const val SIXTY_SECONDS = 60L
 
-// engine skal brukes primært i test-øyemed, når man sender med MockEngine.
-// Forøvrig kan man la den være null.
-fun defaultHttpClient(
-    objectMapper: ObjectMapper,
-    engine: HttpClientEngine? = null,
-    configBlock: HttpClientConfig<*>.() -> Unit = {},
-    engineConfigBlock: CIOEngineConfig.() -> Unit = {}
-) = engine?.let {
-    HttpClient(engine) {
-        apply(defaultSetup(objectMapper))
-        apply(configBlock)
-    }
-} ?: HttpClient(CIO) {
-    apply(defaultSetup(objectMapper))
-    apply(configBlock)
-    engine(engineConfigBlock)
-}
+fun httpClientCIO() = HttpClient(CIO).medDefaultConfig()
+fun httpClientGeneric(engine: HttpClientEngine) = HttpClient(engine).medDefaultConfig()
 
-private fun defaultSetup(objectMapper: ObjectMapper): HttpClientConfig<*>.() -> Unit = {
+private fun HttpClient.medDefaultConfig() = this.config {
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, JacksonConverter(objectMapper))
+        jackson {
+            registerModule(KotlinModule.Builder().build())
+            registerModule(JavaTimeModule())
+            setDefaultPrettyPrinter(
+                DefaultPrettyPrinter().apply {
+                    indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
+                    indentObjectsWith(DefaultIndenter("  ", "\n"))
+                }
+            )
+            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+        }
     }
     install(HttpTimeout) {
         connectTimeoutMillis = Duration.ofSeconds(SIXTY_SECONDS).toMillis()
@@ -60,14 +53,3 @@ private fun defaultSetup(objectMapper: ObjectMapper): HttpClientConfig<*>.() -> 
     }
     this.expectSuccess = true
 }
-
-fun defaultObjectMapper(): ObjectMapper = ObjectMapper()
-    .registerModule(KotlinModule.Builder().build())
-    .registerModule(JavaTimeModule())
-    .setDefaultPrettyPrinter(
-        DefaultPrettyPrinter().apply {
-            indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
-            indentObjectsWith(DefaultIndenter("  ", "\n"))
-        }
-    )
-    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)

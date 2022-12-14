@@ -120,14 +120,14 @@ class PersonopplysningerService(
         }
     }
 
-    fun loggVedInngang(packet: JsonMessage) {
+    private fun loggVedInngang(packet: JsonMessage) {
         LOG.info(
-            "løser behov med {} og {}",
+            "løser person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
         SECURELOG.info(
-            "løser behov med {} og {}",
+            "løser person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
@@ -136,12 +136,12 @@ class PersonopplysningerService(
 
     private fun loggVedUtgang(packet: JsonMessage) {
         LOG.info(
-            "har løst behov med {} og {}",
+            "har løst person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )
         SECURELOG.info(
-            "har løst behov med {} og {}",
+            "har løst person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
         )

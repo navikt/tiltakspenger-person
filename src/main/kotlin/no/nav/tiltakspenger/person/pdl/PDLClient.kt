@@ -4,19 +4,16 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.engine.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.*
 import no.nav.tiltakspenger.person.Configuration
 import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
-import no.nav.tiltakspenger.person.defaultHttpClient
-import no.nav.tiltakspenger.person.defaultObjectMapper
 import no.nav.tiltakspenger.person.domain.models.BarnIFolkeregisteret
 import no.nav.tiltakspenger.person.domain.models.Person
+import no.nav.tiltakspenger.person.httpClientCIO
 
 const val INDIVIDSTONAD = "IND"
 
@@ -42,13 +39,8 @@ fun Throwable.toPdlClientError() = when (this) {
 
 class PDLClient(
     private val pdlKlientConfig: PdlKlientConfig = Configuration.pdlKlientConfig(),
-    private val objectMapper: ObjectMapper = defaultObjectMapper(),
     private val getToken: suspend () -> String,
-    engine: HttpClientEngine? = null,
-    private val httpClient: HttpClient = defaultHttpClient(
-        objectMapper = objectMapper,
-        engine = engine
-    ) {}
+    private val httpClient: HttpClient = httpClientCIO()
 ) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {

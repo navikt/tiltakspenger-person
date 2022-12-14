@@ -1,34 +1,26 @@
 package no.nav.tiltakspenger.person.auth
 
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.databind.ObjectMapper
+import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import no.nav.tiltakspenger.person.Configuration
-import no.nav.tiltakspenger.person.defaultHttpClient
-import no.nav.tiltakspenger.person.defaultObjectMapper
+import no.nav.tiltakspenger.person.httpClientCIO
 import java.time.LocalDateTime
 
 fun interface TokenProvider {
     suspend fun getToken(): String
 }
 
-
 @Suppress("TooGenericExceptionCaught")
 class AzureTokenProvider(
-    objectMapper: ObjectMapper = defaultObjectMapper(),
-    engine: HttpClientEngine? = null,
+    private val httpClient: HttpClient = httpClientCIO(),
     private val config: OauthConfig = Configuration.oauthConfig(),
 ) : TokenProvider {
-    private val azureHttpClient = defaultHttpClient(
-        objectMapper = objectMapper, engine = engine
-    )
-
     private val tokenCache = TokenCache()
 
     override suspend fun getToken(): String {
@@ -42,11 +34,11 @@ class AzureTokenProvider(
     }
 
     private suspend fun wellknown(): WellKnown {
-        return azureHttpClient.get(config.wellknownUrl).body()
+        return httpClient.get(config.wellknownUrl).body()
     }
 
     private suspend fun clientCredentials(): String {
-        return azureHttpClient.submitForm(
+        return httpClient.submitForm(
             url = wellknown().tokenEndpoint,
             formParameters = Parameters.build {
                 append("grant_type", "client_credentials")
@@ -73,7 +65,7 @@ class AzureTokenProvider(
 
         fun update(accessToken: String, expiresIn: Long) {
             token = accessToken
-            expires = LocalDateTime.now().plusSeconds(expiresIn).minusSeconds(Companion.SAFETYMARGIN)
+            expires = LocalDateTime.now().plusSeconds(expiresIn).minusSeconds(SAFETYMARGIN)
         }
 
         companion object {

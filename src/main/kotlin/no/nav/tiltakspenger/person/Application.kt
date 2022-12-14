@@ -16,13 +16,11 @@ fun main() {
         log.error { "Uncaught exception logget i securelog" }
         securelog.error(e) { e.message }
     }
-
     val tokenProvider = AzureTokenProvider()
-
     log.info { "Starting tiltakspenger-person" }
-    RapidApplication.create(no.nav.tiltakspenger.person.Configuration.rapidsAndRivers)
+    RapidApplication.create(Configuration.rapidsAndRivers)
         .apply {
-            no.nav.tiltakspenger.person.PersonopplysningerService(
+            PersonopplysningerService(
                 rapidsConnection = this,
                 pdlService = PDLService(pdlClient = PDLClient(getToken = tokenProvider::getToken))
             )
