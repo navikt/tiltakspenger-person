@@ -2,6 +2,9 @@ package no.nav.tiltakspenger.person.pdl.models
 
 import arrow.core.left
 import arrow.core.right
+import no.nav.tiltakspenger.person.Endring
+import no.nav.tiltakspenger.person.EndringsMetadata
+import no.nav.tiltakspenger.person.FolkeregisterMetadata
 import no.nav.tiltakspenger.person.pdl.PDLClientError
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

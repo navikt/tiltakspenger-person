@@ -11,7 +11,7 @@ import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import no.nav.tiltakspenger.person.domain.models.Person
+import no.nav.tiltakspenger.person.Person
 import no.nav.tiltakspenger.person.httpClientGeneric
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

@@ -2,7 +2,7 @@ package no.nav.tiltakspenger.person.pdl
 
 import arrow.core.Either
 import arrow.core.left
-import no.nav.tiltakspenger.person.domain.models.Person
+import no.nav.tiltakspenger.person.Person
 
 class PDLService(private val pdlClient: PDLClient) {
 

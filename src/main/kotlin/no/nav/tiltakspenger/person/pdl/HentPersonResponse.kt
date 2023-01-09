@@ -4,8 +4,8 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.left
 import arrow.core.right
-import no.nav.tiltakspenger.person.domain.models.BarnIFolkeregisteret
-import no.nav.tiltakspenger.person.domain.models.Person
+import no.nav.tiltakspenger.person.BarnIFolkeregisteret
+import no.nav.tiltakspenger.person.Person
 import no.nav.tiltakspenger.person.pdl.models.GeografiskTilknytning
 import no.nav.tiltakspenger.person.pdl.models.PdlPerson
 import no.nav.tiltakspenger.person.pdl.models.avklarFødsel

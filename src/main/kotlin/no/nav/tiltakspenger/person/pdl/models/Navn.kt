@@ -3,6 +3,10 @@ package no.nav.tiltakspenger.person.pdl.models
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import no.nav.tiltakspenger.person.Changeable
+import no.nav.tiltakspenger.person.EndringsMetadata
+import no.nav.tiltakspenger.person.FolkeregisterMetadata
+import no.nav.tiltakspenger.person.nyeste
 import no.nav.tiltakspenger.person.pdl.PDLClientError
 
 data class Navn(

@@ -6,10 +6,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import no.nav.helse.rapids_rivers.testsupport.TestRapid
-import no.nav.tiltakspenger.person.domain.models.BarnIFolkeregisteret
-import no.nav.tiltakspenger.person.domain.models.Person
 import no.nav.tiltakspenger.person.pdl.PDLService
-import no.nav.tiltakspenger.person.pdl.models.AdressebeskyttelseGradering
 import no.nav.tiltakspenger.person.pdl.query
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
