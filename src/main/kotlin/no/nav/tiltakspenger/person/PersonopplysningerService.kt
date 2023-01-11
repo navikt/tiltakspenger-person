@@ -10,8 +10,8 @@ import no.nav.helse.rapids_rivers.JsonMessage
 import no.nav.helse.rapids_rivers.MessageContext
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.helse.rapids_rivers.River
-import no.nav.tiltakspenger.person.domain.models.Feilmelding
-import no.nav.tiltakspenger.person.domain.models.Respons
+import no.nav.tiltakspenger.libs.person.Feilmelding
+import no.nav.tiltakspenger.libs.person.PersonRespons
 import no.nav.tiltakspenger.person.pdl.PDLClientError
 import no.nav.tiltakspenger.person.pdl.PDLService
 
@@ -49,10 +49,10 @@ class PersonopplysningerService(
                 "behovId" to packet["@behovId"].asText()
             ) {
                 val ident = packet["ident"].asText()
-                val respons: Respons = runBlocking(MDCContext()) {
+                val respons: PersonRespons = runBlocking(MDCContext()) {
                     pdlService.hentPerson(ident)
                 }.map { person ->
-                    Respons(person = person)
+                    PersonRespons(person = person)
                 }.getOrHandle { håndterFeil(it) }
 
                 packet["@løsning"] = mapOf(
@@ -67,7 +67,7 @@ class PersonopplysningerService(
     }
 
     @Suppress("ThrowsCount", "UseCheckOrError")
-    private fun håndterFeil(clientError: PDLClientError): Respons {
+    private fun håndterFeil(clientError: PDLClientError): PersonRespons {
         when (clientError) {
             is PDLClientError.UkjentFeil -> {
                 LOG.error { clientError.errors }
@@ -102,7 +102,7 @@ class PersonopplysningerService(
             PDLClientError.ResponsManglerPerson,
             -> {
                 LOG.error { "Respons fra PDL inneholdt ikke person" }
-                return Respons(feil = Feilmelding.PersonIkkeFunnet)
+                return PersonRespons(feil = Feilmelding.PersonIkkeFunnet)
             }
 
             is PDLClientError.SerializationException -> {

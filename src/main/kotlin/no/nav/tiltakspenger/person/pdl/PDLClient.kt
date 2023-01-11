@@ -9,9 +9,9 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.*
-import no.nav.tiltakspenger.person.BarnIFolkeregisteret
+import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
+import no.nav.tiltakspenger.libs.person.Person
 import no.nav.tiltakspenger.person.Configuration
-import no.nav.tiltakspenger.person.Person
 import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
 import no.nav.tiltakspenger.person.httpClientCIO
 

@@ -1,9 +1,6 @@
 package no.nav.tiltakspenger.person.pdl.models
 
-import no.nav.tiltakspenger.person.BarnUtenFolkeregisteridentifikator
-import no.nav.tiltakspenger.person.Changeable
-import no.nav.tiltakspenger.person.EndringsMetadata
-import no.nav.tiltakspenger.person.FolkeregisterMetadata
+import no.nav.tiltakspenger.libs.person.BarnUtenFolkeregisteridentifikator
 import java.time.LocalDate
 
 enum class ForelderBarnRelasjonRolle {

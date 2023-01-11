@@ -3,6 +3,7 @@ val ktorVersion = "2.2.2"
 val kotestVersion = "5.5.4"
 val jacksonVersion = "2.14.1"
 val mockkVersion = "1.13.3"
+val felleslibVersion = "0.0.9"
 
 plugins {
     application
@@ -22,7 +23,7 @@ dependencies {
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(kotlin("stdlib"))
-    implementation("com.github.navikt:tiltakspenger-libs:0.0.4")
+    implementation("com.github.navikt.tiltakspenger-libs:person-dtos:$felleslibVersion")
     implementation("com.github.navikt:rapids-and-rivers:2022122311551671792919.2bdd972d7bdb")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.6.4")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
