@@ -7,14 +7,14 @@ import arrow.core.right
 import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
 import no.nav.tiltakspenger.libs.person.Person
 import no.nav.tiltakspenger.person.pdl.models.AdressebeskyttelseGradering
-import no.nav.tiltakspenger.libs.person.AdressebeskyttelseGradering as AdressebeskyttelseGradLib
 import no.nav.tiltakspenger.person.pdl.models.GeografiskTilknytning
 import no.nav.tiltakspenger.person.pdl.models.PdlPerson
-import no.nav.tiltakspenger.person.pdl.models.avklarNavn
 import no.nav.tiltakspenger.person.pdl.models.avklarFødsel
 import no.nav.tiltakspenger.person.pdl.models.avklarGradering
+import no.nav.tiltakspenger.person.pdl.models.avklarNavn
 import no.nav.tiltakspenger.person.pdl.models.toBarnUtenforFolkeregisteret
 import no.nav.tiltakspenger.person.pdl.models.toIdenterForBarnIFolkeregisteret
+import no.nav.tiltakspenger.libs.person.AdressebeskyttelseGradering as AdressebeskyttelseGradLib
 
 data class PdlResponseData(
     val hentPerson: PdlPerson?,

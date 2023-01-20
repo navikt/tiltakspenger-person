@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import no.nav.tiltakspenger.person.pdl.PDLClientError
-import no.nav.tiltakspenger.person.pdl.models.getEndringstidspunktOrNull
 
 data class Navn(
     val fornavn: String,

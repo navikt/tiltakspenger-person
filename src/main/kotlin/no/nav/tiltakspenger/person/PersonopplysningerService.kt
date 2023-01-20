@@ -66,7 +66,6 @@ class PersonopplysningerService(
         }.getOrThrow()
     }
 
-    @Suppress("ThrowsCount", "UseCheckOrError")
     private fun håndterFeil(clientError: PDLClientError): PersonRespons {
         when (clientError) {
             is PDLClientError.UkjentFeil -> {

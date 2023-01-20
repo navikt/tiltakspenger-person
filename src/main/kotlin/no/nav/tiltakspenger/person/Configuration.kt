@@ -55,8 +55,10 @@ internal object Configuration {
     private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getProperty("NAIS_CLUSTER_NAME")) {
         "dev-gcp" ->
             systemProperties() overriding EnvironmentVariables overriding devProperties overriding defaultProperties
+
         "prod-gcp" ->
             systemProperties() overriding EnvironmentVariables overriding prodProperties overriding defaultProperties
+
         else -> {
             systemProperties() overriding EnvironmentVariables overriding localProperties overriding defaultProperties
         }

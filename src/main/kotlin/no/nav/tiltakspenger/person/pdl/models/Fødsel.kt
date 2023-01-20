@@ -3,9 +3,6 @@ package no.nav.tiltakspenger.person.pdl.models
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import no.nav.tiltakspenger.person.pdl.models.EndringsMetadata
-import no.nav.tiltakspenger.person.pdl.models.FolkeregisterMetadata
-import no.nav.tiltakspenger.person.pdl.models.Fødsel
 import no.nav.tiltakspenger.person.pdl.PDLClientError
 import java.time.LocalDate
 
@@ -22,5 +19,5 @@ fun avklarFødsel(foedsler: List<Fødsel>): Either<PDLClientError, Fødsel> {
     val foedslerSortert = foedsler.sortedByDescending { getEndringstidspunktOrNull(it) }
     val foedselFreg = foedslerSortert.find { it.metadata.master.isFreg() }
     return foedselFreg?.right() ?: foedslerSortert.firstOrNull()?.right()
-    ?: PDLClientError.FødselKunneIkkeAvklares.left()
+        ?: PDLClientError.FødselKunneIkkeAvklares.left()
 }
