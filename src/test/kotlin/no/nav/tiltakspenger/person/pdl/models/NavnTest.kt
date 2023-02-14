@@ -24,9 +24,9 @@ internal class NavnTest {
                                 registrert = LocalDateTime.now(),
                                 systemkilde = "lol",
                                 registrertAv = "qwe",
-                                type = "OPPRETT"
-                            )
-                        )
+                                type = "OPPRETT",
+                            ),
+                        ),
                     ),
                     folkeregistermetadata = FolkeregisterMetadata(
                         kilde = Kilde.PDL,
@@ -34,10 +34,10 @@ internal class NavnTest {
                         gyldighetstidspunkt = LocalDateTime.now(),
                         ajourholdstidspunkt = LocalDateTime.now(),
                         aarsak = null,
-                        opphoerstidspunkt = null
-                    )
-                )
-            )
+                        opphoerstidspunkt = null,
+                    ),
+                ),
+            ),
         )
         assertTrue(avklartNavn.isLeft())
         assertEquals(PDLClientError.NavnKunneIkkeAvklares.left(), avklartNavn)
@@ -56,9 +56,9 @@ internal class NavnTest {
                         registrert = LocalDateTime.now(),
                         systemkilde = "lol",
                         registrertAv = "qwe",
-                        type = "OPPRETT"
-                    )
-                )
+                        type = "OPPRETT",
+                    ),
+                ),
             ),
             folkeregistermetadata = FolkeregisterMetadata(
                 kilde = Kilde.FREG,
@@ -66,11 +66,11 @@ internal class NavnTest {
                 gyldighetstidspunkt = LocalDateTime.now(),
                 ajourholdstidspunkt = LocalDateTime.now(),
                 aarsak = null,
-                opphoerstidspunkt = null
-            )
+                opphoerstidspunkt = null,
+            ),
         )
         val avklartNavn = avklarNavn(
-            listOf(navn)
+            listOf(navn),
         )
         assertEquals(navn.right(), avklartNavn)
     }

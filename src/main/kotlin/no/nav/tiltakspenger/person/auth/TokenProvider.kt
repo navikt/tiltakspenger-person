@@ -24,8 +24,11 @@ class AzureTokenProvider(
     override suspend fun getToken(): String {
         try {
             val currentToken = tokenCache.token
-            return if (currentToken != null && !tokenCache.isExpired()) currentToken
-            else clientCredentials()
+            return if (currentToken != null && !tokenCache.isExpired()) {
+                currentToken
+            } else {
+                clientCredentials()
+            }
         } catch (e: Exception) {
             throw AzureAuthException(e)
         }
@@ -43,11 +46,11 @@ class AzureTokenProvider(
                 append("client_id", config.clientId)
                 append("client_secret", config.clientSecret)
                 append("scope", config.scope)
-            }
+            },
         ).body<OAuth2AccessTokenResponse>().let {
             tokenCache.update(
                 it.accessToken,
-                it.expiresIn.toLong()
+                it.expiresIn.toLong(),
             )
             return@let it.accessToken
         }
@@ -81,7 +84,7 @@ class AzureTokenProvider(
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class WellKnown(
         @JsonProperty("token_endpoint")
-        val tokenEndpoint: String
+        val tokenEndpoint: String,
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -93,7 +96,7 @@ class AzureTokenProvider(
         @JsonProperty("ext_expires_in")
         val extExpiresIn: Int,
         @JsonProperty("expires_in")
-        val expiresIn: Int
+        val expiresIn: Int,
     )
 
     class AzureAuthException(e: Exception) : RuntimeException(e)

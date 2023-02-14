@@ -35,21 +35,21 @@ internal object Configuration {
             "application.profile" to Profile.LOCAL.toString(),
             "pdlScope" to "api://dev-fss.pdl.pdl-api/.default",
             "pdlBaseUrl" to "https://pdl-api.dev-fss-pub.nais.io/graphql",
-        )
+        ),
     )
     private val devProperties = ConfigurationMap(
         mapOf(
             "application.profile" to Profile.DEV.toString(),
             "pdlScope" to "api://dev-fss.pdl.pdl-api/.default",
             "pdlBaseUrl" to "https://pdl-api.dev-fss-pub.nais.io/graphql",
-        )
+        ),
     )
     private val prodProperties = ConfigurationMap(
         mapOf(
             "application.profile" to Profile.PROD.toString(),
             "pdlScope" to "api://prod-fss.pdl.pdl-api/.default",
             "pdlBaseUrl" to "https://pdl-api.prod-fss-pub.nais.io/graphql",
-        )
+        ),
     )
 
     private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getProperty("NAIS_CLUSTER_NAME")) {
@@ -68,12 +68,12 @@ internal object Configuration {
         scope: String = config()[Key("pdlScope", stringType)],
         clientId: String = config()[Key("AZURE_APP_CLIENT_ID", stringType)],
         clientSecret: String = config()[Key("AZURE_APP_CLIENT_SECRET", stringType)],
-        wellknownUrl: String = config()[Key("AZURE_APP_WELL_KNOWN_URL", stringType)]
+        wellknownUrl: String = config()[Key("AZURE_APP_WELL_KNOWN_URL", stringType)],
     ) = AzureTokenProvider.OauthConfig(
         scope = scope,
         clientId = clientId,
         clientSecret = clientSecret,
-        wellknownUrl = wellknownUrl
+        wellknownUrl = wellknownUrl,
     )
 
     fun pdlKlientConfig(baseUrl: String = config()[Key("pdlBaseUrl", stringType)]) =

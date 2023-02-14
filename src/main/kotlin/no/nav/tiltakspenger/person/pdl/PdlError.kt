@@ -4,15 +4,15 @@ data class PdlError(
     val message: String,
     val locations: List<PdlErrorLocation>,
     val path: List<String>? = null,
-    val extensions: PdlErrorExtension
+    val extensions: PdlErrorExtension,
 )
 
 data class PdlErrorLocation(
     val line: Int?,
-    val column: Int?
+    val column: Int?,
 )
 
 data class PdlErrorExtension(
     val code: String? = null,
-    val classification: String
+    val classification: String,
 )

@@ -8,5 +8,5 @@ data class FolkeregisterMetadata(
     val gyldighetstidspunkt: LocalDateTime?,
     val kilde: String?,
     val opphoerstidspunkt: LocalDateTime?,
-    val sekvens: Int?
+    val sekvens: Int?,
 )

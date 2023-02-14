@@ -12,7 +12,7 @@ class PDLService(private val pdlClient: PDLClient) {
                 barn = barnsIdenter.map { ident ->
                     pdlClient.hentPersonSomBarn(ident)
                         .fold({ return it.left() }, { it })
-                }
+                },
             )
         }
     }

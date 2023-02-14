@@ -45,7 +45,7 @@ fun Throwable.toPdlClientError() = when (this) {
 class PDLClient(
     private val pdlKlientConfig: PdlKlientConfig = Configuration.pdlKlientConfig(),
     private val getToken: suspend () -> String,
-    private val httpClient: HttpClient = httpClientCIO()
+    private val httpClient: HttpClient = httpClientCIO(),
 ) {
     private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {

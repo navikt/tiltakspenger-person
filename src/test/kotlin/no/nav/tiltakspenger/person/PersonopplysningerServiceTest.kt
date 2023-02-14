@@ -28,8 +28,8 @@ class PersonopplysningerServiceTest {
                     etternavn = "testesen",
                     mellomnavn = null,
                     fødselsdato = LocalDate.of(2022, Month.JUNE, 21),
-                    adressebeskyttelseGradering = AdressebeskyttelseGradering.UGRADERT
-                )
+                    adressebeskyttelseGradering = AdressebeskyttelseGradering.UGRADERT,
+                ),
             ),
             barnUtenFolkeregisteridentifikator = emptyList(),
             fødselsdato = LocalDate.of(2020, Month.APRIL, 10),
@@ -46,7 +46,7 @@ class PersonopplysningerServiceTest {
         val pdlService = mockk<PDLService>()
         PersonopplysningerService(
             rapidsConnection = rapid,
-            pdlService = pdlService
+            pdlService = pdlService,
         )
         coEvery { pdlService.hentPerson(any()) } returns person.right()
         return Pair(rapid, pdlService)
@@ -65,7 +65,7 @@ class PersonopplysningerServiceTest {
               "@id": "1", 
               "@behovId": "2"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         coVerify { pdlClient.hentPerson(ident) }
 
@@ -96,7 +96,8 @@ class PersonopplysningerServiceTest {
             }
             }
             """.trimIndent(),
-            rapid.inspektør.message(0).toString(), JSONCompareMode.LENIENT
+            rapid.inspektør.message(0).toString(),
+            JSONCompareMode.LENIENT,
         )
     }
 
@@ -119,7 +120,7 @@ class PersonopplysningerServiceTest {
                 "@behovId": "2", 
                 "@løsning": "hei"
             }
-            """.trimIndent()
+            """.trimIndent(),
         )
         coVerify { pdlClient.hentPerson(any()) wasNot Called }
     }

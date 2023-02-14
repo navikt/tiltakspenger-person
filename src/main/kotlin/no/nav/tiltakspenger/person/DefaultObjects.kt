@@ -31,7 +31,7 @@ private fun HttpClient.medDefaultConfig() = this.config {
                 DefaultPrettyPrinter().apply {
                     indentArraysWith(DefaultPrettyPrinter.FixedSpaceIndenter.instance)
                     indentObjectsWith(DefaultIndenter("  ", "\n"))
-                }
+                },
             )
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         }

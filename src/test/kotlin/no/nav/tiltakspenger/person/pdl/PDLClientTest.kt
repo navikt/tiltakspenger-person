@@ -29,7 +29,7 @@ class PDLClientTest {
         return MockEngine {
             respond(
                 content = response,
-                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString())
+                headers = headersOf(HttpHeaders.ContentType, ContentType.Application.Json.toString()),
             )
         }
     }
@@ -40,7 +40,7 @@ class PDLClientTest {
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
             getToken = { accessToken },
-            httpClient = httpClientGeneric(mockEngine(response))
+            httpClient = httpClientGeneric(mockEngine(response)),
         )
 
         runBlocking {
@@ -54,7 +54,7 @@ class PDLClientTest {
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
             getToken = { accessToken },
-            httpClient = httpClientGeneric(mockEngine(response))
+            httpClient = httpClientGeneric(mockEngine(response)),
         )
 
         runBlocking {
@@ -78,7 +78,7 @@ class PDLClientTest {
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
             getToken = { accessToken },
-            httpClient = httpClientGeneric(mockEngine(response))
+            httpClient = httpClientGeneric(mockEngine(response)),
         )
 
         runBlocking {
@@ -92,7 +92,7 @@ class PDLClientTest {
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
             getToken = { accessToken },
-            httpClient = httpClientGeneric(mockEngine(response))
+            httpClient = httpClientGeneric(mockEngine(response)),
         )
 
         runBlocking {
@@ -108,7 +108,7 @@ class PDLClientTest {
         val pdlClient = PDLClient(
             pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
             getToken = { accessToken },
-            httpClient = httpClientGeneric(mockEngine(response))
+            httpClient = httpClientGeneric(mockEngine(response)),
         )
 
         runBlocking {

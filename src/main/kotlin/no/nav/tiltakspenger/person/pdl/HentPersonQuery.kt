@@ -6,12 +6,12 @@ fun hentPersonQuery(ident: String): GraphqlQuery {
     return GraphqlQuery(
         query = query,
         variables = mapOf(
-            "ident" to ident
-        )
+            "ident" to ident,
+        ),
     )
 }
 
 data class GraphqlQuery(
     val query: String,
-    val variables: Map<String, String>
+    val variables: Map<String, String>,
 )

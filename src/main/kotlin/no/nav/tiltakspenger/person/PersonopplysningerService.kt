@@ -20,7 +20,7 @@ private val SECURELOG = KotlinLogging.logger("tjenestekall")
 
 class PersonopplysningerService(
     rapidsConnection: RapidsConnection,
-    val pdlService: PDLService
+    val pdlService: PDLService,
 ) : River.PacketListener {
 
     companion object {
@@ -46,7 +46,7 @@ class PersonopplysningerService(
 
             withLoggingContext(
                 "id" to packet["@id"].asText(),
-                "behovId" to packet["@behovId"].asText()
+                "behovId" to packet["@behovId"].asText(),
             ) {
                 val ident = packet["ident"].asText()
                 val respons: PersonRespons = runBlocking(MDCContext()) {
@@ -56,7 +56,7 @@ class PersonopplysningerService(
                 }.getOrHandle { håndterFeil(it) }
 
                 packet["@løsning"] = mapOf(
-                    BEHOV.PERSONOPPLYSNINGER to respons
+                    BEHOV.PERSONOPPLYSNINGER to respons,
                 )
                 loggVedUtgang(packet)
                 context.publish(ident, packet.toJson())
@@ -123,12 +123,12 @@ class PersonopplysningerService(
         LOG.info(
             "løser person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
-            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
         )
         SECURELOG.info(
             "løser person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
-            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
         )
         SECURELOG.debug { "mottok melding: ${packet.toJson()}" }
     }
@@ -137,12 +137,12 @@ class PersonopplysningerService(
         LOG.info(
             "har løst person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
-            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
         )
         SECURELOG.info(
             "har løst person-behov med {} og {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
-            StructuredArguments.keyValue("behovId", packet["@behovId"].asText())
+            StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
         )
         SECURELOG.debug { "publiserer melding: ${packet.toJson()}" }
     }
@@ -157,7 +157,7 @@ class PersonopplysningerService(
             "feil ${ex.message} ved behandling av behov med id {} og behovId {}",
             StructuredArguments.keyValue("id", packet["@id"].asText()),
             StructuredArguments.keyValue("behovId", packet["@behovId"].asText()),
-            ex
+            ex,
         )
     }
 }

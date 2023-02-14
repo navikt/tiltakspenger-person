@@ -7,7 +7,7 @@ enum class ForelderBarnRelasjonRolle {
     BARN,
     MOR,
     FAR,
-    MEDMOR
+    MEDMOR,
 }
 
 data class Personnavn(
@@ -19,7 +19,7 @@ data class Personnavn(
 enum class KjoennType {
     MANN,
     KVINNE,
-    UKJENT
+    UKJENT,
 }
 
 data class RelatertBiPerson(
@@ -35,7 +35,7 @@ data class ForelderBarnRelasjon(
     val minRolleForPerson: ForelderBarnRelasjonRolle?,
     val relatertPersonUtenFolkeregisteridentifikator: RelatertBiPerson?,
     override val folkeregistermetadata: FolkeregisterMetadata?,
-    override val metadata: EndringsMetadata
+    override val metadata: EndringsMetadata,
 ) : Changeable
 
 fun List<ForelderBarnRelasjon>.toIdenterForBarnIFolkeregisteret(): List<String> {
@@ -61,7 +61,7 @@ fun List<ForelderBarnRelasjon>.toBarnUtenforFolkeregisteret(): List<BarnUtenFolk
                 mellomnavn = navn?.mellomnavn,
                 etternavn = navn?.etternavn,
                 fødselsdato = barn.foedselsdato,
-                statsborgerskap = barn.statsborgerskap
+                statsborgerskap = barn.statsborgerskap,
             )
         }
         .toList()

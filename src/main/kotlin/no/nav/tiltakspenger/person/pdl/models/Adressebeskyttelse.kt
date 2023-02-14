@@ -9,7 +9,7 @@ enum class AdressebeskyttelseGradering {
     STRENGT_FORTROLIG_UTLAND,
     STRENGT_FORTROLIG,
     FORTROLIG,
-    UGRADERT
+    UGRADERT,
 }
 
 data class Adressebeskyttelse(

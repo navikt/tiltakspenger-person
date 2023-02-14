@@ -4,7 +4,7 @@ enum class GtType {
     KOMMUNE,
     BYDEL,
     UTLAND,
-    UDEFINERT
+    UDEFINERT,
 }
 
 data class GeografiskTilknytning(
@@ -12,5 +12,5 @@ data class GeografiskTilknytning(
     val gtKommune: String?,
     val gtBydel: String?,
     val gtLand: String?,
-    val regel: String
+    val regel: String,
 )

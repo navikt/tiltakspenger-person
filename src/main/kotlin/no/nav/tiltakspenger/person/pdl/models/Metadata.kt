@@ -7,7 +7,7 @@ data class Endring(
     val registrert: LocalDateTime?,
     val registrertAv: String,
     val systemkilde: String,
-    val type: String
+    val type: String,
 )
 
 fun List<Endring>.nyeste(): Endring? = this
@@ -16,5 +16,5 @@ fun List<Endring>.nyeste(): Endring? = this
 
 data class EndringsMetadata(
     val endringer: List<Endring>,
-    val master: String
+    val master: String,
 )

@@ -22,7 +22,7 @@ fun main() {
         .apply {
             PersonopplysningerService(
                 rapidsConnection = this,
-                pdlService = PDLService(pdlClient = PDLClient(getToken = tokenProvider::getToken))
+                pdlService = PDLService(pdlClient = PDLClient(getToken = tokenProvider::getToken)),
             )
 
             register(object : RapidsConnection.StatusListener {

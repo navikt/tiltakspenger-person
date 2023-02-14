@@ -29,10 +29,15 @@ data class HentPersonResponse(
 ) {
     private fun extractPerson(): Either<PDLClientError, PdlPerson> {
         return if (this.errors.isNotEmpty()) {
-            if (errors.any { it.message == FANT_IKKE_PERSON }) PDLClientError.FantIkkePerson.left()
-            else PDLClientError.UkjentFeil(this.errors).left()
-        } else this.data?.hentPerson?.right()
-            ?: PDLClientError.ResponsManglerPerson.left()
+            if (errors.any { it.message == FANT_IKKE_PERSON }) {
+                PDLClientError.FantIkkePerson.left()
+            } else {
+                PDLClientError.UkjentFeil(this.errors).left()
+            }
+        } else {
+            this.data?.hentPerson?.right()
+                ?: PDLClientError.ResponsManglerPerson.left()
+        }
     }
 
     private fun geografiskTilknytning(): GeografiskTilknytning? {

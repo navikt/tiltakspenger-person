@@ -9,7 +9,7 @@ import java.time.LocalDate
 data class Fødsel(
     val foedselsdato: LocalDate,
     override val folkeregistermetadata: FolkeregisterMetadata,
-    override val metadata: EndringsMetadata
+    override val metadata: EndringsMetadata,
 ) : Changeable
 
 const val FREG = "FREG"
