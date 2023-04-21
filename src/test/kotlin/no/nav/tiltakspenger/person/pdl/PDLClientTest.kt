@@ -117,4 +117,18 @@ class PDLClientTest {
             .mapLeft { (it is PDLClientError.SerializationException) shouldBe true }
             .map { fail("Serialization of bad payload should result in an error") }
     }
+
+    @Test
+    fun `should handle navn with null in folkeregisterdata`() {
+        val response = this::class.java.getResource("/pdlResponseManglerFolkeregisterdata.json").readText()
+        val pdlClient = PDLClient(
+            pdlKlientConfig = PDLClient.PdlKlientConfig(baseUrl = "http://localhost:8080"),
+            getToken = { accessToken },
+            httpClient = httpClientGeneric(mockEngine(response)),
+        )
+
+        runBlocking {
+            pdlClient.hentPerson("test")
+        }.shouldBeRight()
+    }
 }
