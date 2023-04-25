@@ -52,6 +52,7 @@ class PDLClient(
             httpClient.post(pdlKlientConfig.baseUrl) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
+                header("behandlingsnummer", "B470")
                 bearerAuth(getToken())
                 contentType(ContentType.Application.Json)
                 setBody(hentPersonQuery(ident))
