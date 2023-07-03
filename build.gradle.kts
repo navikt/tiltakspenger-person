@@ -1,6 +1,6 @@
 val javaVersion = JavaVersion.VERSION_17
 val ktorVersion = "2.3.1"
-val kotestVersion = "5.5.5"
+val kotestVersion = "5.6.2"
 val jacksonVersion = "2.15.2"
 val mockkVersion = "1.13.4"
 val felleslibVersion = "0.0.41"
