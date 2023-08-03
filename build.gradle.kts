@@ -24,7 +24,7 @@ dependencies {
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     implementation(kotlin("stdlib"))
     implementation("com.github.navikt.tiltakspenger-libs:person-dtos:$felleslibVersion")
-    implementation("com.github.navikt:rapids-and-rivers:2023042609401682494832.502ede9d3e7e")
+    implementation("com.github.navikt:rapids-and-rivers:2023080113411690890096.310ed8e5ed93")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.7.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.4")
     implementation("ch.qos.logback:logback-classic:1.4.8")
