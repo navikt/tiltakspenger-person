@@ -1,6 +1,6 @@
 package no.nav.tiltakspenger.person.pdl
 
-import arrow.core.getOrHandle
+import arrow.core.getOrElse
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.fail
@@ -58,7 +58,7 @@ class PDLClientTest {
         )
 
         runBlocking {
-            val pair = pdlClient.hentPerson("test").getOrHandle { }
+            val pair = pdlClient.hentPerson("test").getOrElse { }
             pair should beInstanceOf<Pair<Person, List<String>>>()
             val person = (pair as Pair<Person, List<String>>).first
             val barnsIdenter = pair.second

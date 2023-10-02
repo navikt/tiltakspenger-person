@@ -1,6 +1,6 @@
 package no.nav.tiltakspenger.person
 
-import arrow.core.getOrHandle
+import arrow.core.getOrElse
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.slf4j.MDCContext
 import mu.KotlinLogging
@@ -53,7 +53,7 @@ class PersonopplysningerService(
                     pdlService.hentPerson(ident)
                 }.map { person ->
                     PersonRespons(person = person)
-                }.getOrHandle { håndterFeil(it) }
+                }.getOrElse { håndterFeil(it) }
 
                 packet["@løsning"] = mapOf(
                     BEHOV.PERSONOPPLYSNINGER to respons,

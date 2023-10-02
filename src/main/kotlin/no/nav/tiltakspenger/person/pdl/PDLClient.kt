@@ -1,8 +1,8 @@
 package no.nav.tiltakspenger.person.pdl
 
 import arrow.core.Either
-import arrow.core.continuations.either
 import arrow.core.left
+import arrow.core.raise.either
 import arrow.core.right
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
