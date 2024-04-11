@@ -1,4 +1,4 @@
-package no.nav.tiltakspenger.person
+package no.nav.tiltakspenger.person.auth
 
 import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
@@ -7,7 +7,6 @@ import com.natpryce.konfig.Key
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
-import no.nav.tiltakspenger.person.auth.AzureTokenProvider
 import no.nav.tiltakspenger.person.pdl.PDLClient
 
 internal object Configuration {

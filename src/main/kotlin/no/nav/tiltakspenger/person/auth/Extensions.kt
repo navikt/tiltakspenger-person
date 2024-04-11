@@ -1,4 +1,4 @@
-package no.nav.tiltakspenger.person
+package no.nav.tiltakspenger.person.auth
 
 import io.ktor.server.application.ApplicationCall
 import io.ktor.server.auth.authentication

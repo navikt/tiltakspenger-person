@@ -7,7 +7,6 @@ import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.http.Parameters
-import no.nav.tiltakspenger.person.Configuration
 import no.nav.tiltakspenger.person.httpClientCIO
 import java.time.LocalDateTime
 
