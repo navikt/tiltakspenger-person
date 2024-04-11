@@ -17,7 +17,7 @@ fun interface TokenProvider {
 
 class AzureTokenProvider(
     private val httpClient: HttpClient = httpClientCIO(),
-    private val config: OauthConfig = Configuration.oauthConfig(),
+    private val config: OauthConfig = Configuration.oauthPDLAzureConfig(),
 ) : TokenProvider {
     private val tokenCache = TokenCache()
 
@@ -57,7 +57,6 @@ class AzureTokenProvider(
     }
 
     class TokenCache {
-
         var token: String? = null
             private set
         private var expires: LocalDateTime? = null

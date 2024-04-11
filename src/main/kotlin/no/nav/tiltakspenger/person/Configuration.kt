@@ -4,6 +4,7 @@ import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties.Companion.systemProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.Key
+import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import no.nav.tiltakspenger.person.auth.AzureTokenProvider
@@ -64,7 +65,42 @@ internal object Configuration {
         }
     }
 
-    fun oauthConfig(
+    fun httpPort() = config()[Key("application.httpPort", intType)]
+
+    // tokendings(tokenX) auth for å authentisere ekstern sluttbruker
+   /* fun tokenxValidationConfig(
+        clientId: String = config()[Key("TOKEN_X_CLIENT_ID", stringType)],
+        wellKnownUrl: String = config()[Key("TOKEN_X_WELL_KNOWN_URL", stringType)],
+        issuer: String = config()[Key("TOKEN_X_ISSUER", stringType)],
+        jwksUri: String = config()[Key("TOKEN_X_JWKS_URI", stringType)],
+    ) = TokenValidationConfig(
+        clientId = clientId,
+        wellKnownUrl = wellKnownUrl,
+        issuer = issuer,
+        jwksUri = jwksUri,
+    )
+
+    //azure auth for å authentisere saksbehandler eller systembruker
+    fun azureValidationConfig(
+        clientId: String = config()[Key("AZURE_APP_CLIENT_ID", stringType)],
+        wellKnownUrl: String = config()[Key("AZURE_APP_WELL_KNOWN_URL", stringType)],
+        issuer: String = config()[Key("AZURE_OPENID_CONFIG_ISSUER", stringType)],
+        jwksUri: String = config()[Key("AZURE_OPENID_CONFIG_JWKS_URI", stringType)],
+    ) = TokenValidationConfig(
+        clientId = clientId,
+        wellKnownUrl = wellKnownUrl,
+        issuer = issuer,
+        jwksUri = jwksUri,
+    )
+
+    data class TokenValidationConfig(
+        val clientId: String,
+        val wellKnownUrl: String,
+        val issuer: String,
+        val jwksUri: String,
+    ) */
+
+    fun oauthPDLAzureConfig(
         scope: String = config()[Key("pdlScope", stringType)],
         clientId: String = config()[Key("AZURE_APP_CLIENT_ID", stringType)],
         clientSecret: String = config()[Key("AZURE_APP_CLIENT_SECRET", stringType)],
