@@ -16,11 +16,12 @@ import no.nav.helse.rapids_rivers.RapidApplication
 import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.security.token.support.v2.RequiredClaims
 import no.nav.security.token.support.v2.tokenValidationSupport
-import no.nav.tiltakspenger.person.auth.AzureTokenProvider
-import no.nav.tiltakspenger.person.pdl.PDLAzureRoutes
+import no.nav.tiltakspenger.person.auth.TokenProvider
+import no.nav.tiltakspenger.person.pdl.AzureRoutes
 import no.nav.tiltakspenger.person.pdl.PDLClient
 import no.nav.tiltakspenger.person.pdl.PDLService
-import no.nav.tiltakspenger.person.pdl.PDLTokenxRoutes
+import no.nav.tiltakspenger.person.pdl.TokenxRoutes
+import no.nav.tiltakspenger.person.auth.Configuration as AuthConfiguration
 
 enum class ISSUER(val value: String) {
     TOKENDINGS("tokendings"),
@@ -37,13 +38,16 @@ fun main() {
         securelog.error(e) { e.message }
     }
 
-    val tokenProvider = AzureTokenProvider()
+    // val tokenProvider = AzureTokenProvider()
     log.info { "Starting tiltakspenger-person" }
 
     // embeddedServer(Netty, port = httpPort(), module = Application::applicationModule).start(wait = true)
+    val applicationConfig = ApplicationConfig("application.conf")
+    val tokenProvider = TokenProvider(applicationConfig)
 
-    val pdlService = PDLService(pdlClient = PDLClient(getToken = tokenProvider::getToken))
-    RapidApplication.create(Configuration.rapidsAndRivers)
+    val pdlService = PDLService(pdlClient = PDLClient(applicationConfig, tokenProvider))
+
+    RapidApplication.create(AuthConfiguration.rapidsAndRivers)
         .apply {
             PersonopplysningerService(
                 rapidsConnection = this,
@@ -64,18 +68,19 @@ fun main() {
 }
 
 fun Application.applicationModule() {
-    val tokenProvider = AzureTokenProvider()
-    val pdlClient = PDLClient(getToken = tokenProvider::getToken)
+    val applicationConfig = ApplicationConfig("application.conf")
+    val tokenProvider = TokenProvider(applicationConfig)
+    val pdlClient = PDLClient(applicationConfig, tokenProvider)
     val pdlService = PDLService(pdlClient)
 
     installJacksonFeature()
     installAuthentication()
     routing {
         authenticate(ISSUER.TOKENDINGS.value) {
-            PDLTokenxRoutes(pdlService)
+            TokenxRoutes(pdlService)
         }
         authenticate(ISSUER.AZURE.value) {
-            PDLAzureRoutes(pdlService)
+            AzureRoutes(pdlService)
         }
     }
 }

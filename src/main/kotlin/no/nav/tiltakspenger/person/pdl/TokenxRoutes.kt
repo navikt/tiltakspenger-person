@@ -8,19 +8,17 @@ import io.ktor.server.routing.get
 import mu.KotlinLogging
 import no.nav.tiltakspenger.libs.person.Feilmelding
 import no.nav.tiltakspenger.libs.person.PersonRespons
-import no.nav.tiltakspenger.person.fødselsnummer
+import no.nav.tiltakspenger.person.auth.getFnrForTokenx
+import no.nav.tiltakspenger.person.auth.token
 
 private val LOG = KotlinLogging.logger {}
 const val pdltokenxpath = "tokenx/pdl/personalia"
 
-data class RequestBody(
-    val ident: String,
-)
-fun Route.PDLTokenxRoutes(pdlService: PDLService) {
+fun Route.TokenxRoutes(pdlService: PDLService) {
     get(pdltokenxpath) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
-        val ident = call.fødselsnummer() ?: throw IllegalStateException("Mangler fødselsnummer")
-        val pdlrespons = pdlService.hentPerson(ident)
+        val ident = call.getFnrForTokenx() ?: throw IllegalStateException("Mangler fødselsnummer")
+        val pdlrespons = pdlService.hentPerson(ident = ident, subjectToken = call.token())
 
         pdlrespons.fold(
             {

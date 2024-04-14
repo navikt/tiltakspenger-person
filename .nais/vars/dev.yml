@@ -1,3 +1,10 @@
 kafka:
   pool: nav-dev
+cluster: dev-gcp
 urlPdl: pdl-api.dev-fss-pub.nais.io
+endpoints:
+  pdl: https://pdl-api.dev-fss-pub.nais.io/graphql
+audience:
+  pdl: dev-fss:pdl:pdl-api
+scope:
+  pdl: api://dev-fss.pdl.pdl-api/.default

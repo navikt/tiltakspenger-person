@@ -14,10 +14,12 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.JsonConvertException
+import io.ktor.server.config.ApplicationConfig
 import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
 import no.nav.tiltakspenger.libs.person.Person
-import no.nav.tiltakspenger.person.Configuration
 import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
+import no.nav.tiltakspenger.person.auth.TokenProvider
+import no.nav.tiltakspenger.person.auth.token
 import no.nav.tiltakspenger.person.httpClientCIO
 
 const val INDIVIDSTONAD = "IND"
@@ -43,17 +45,26 @@ fun Throwable.toPdlClientError() = when (this) {
 }
 
 class PDLClient(
-    private val pdlKlientConfig: PdlKlientConfig = Configuration.pdlKlientConfig(),
-    private val getToken: suspend () -> String,
+    private val config: ApplicationConfig,
+    private val tokenProvider: TokenProvider,
     private val httpClient: HttpClient = httpClientCIO(),
 ) {
-    private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
+    private val pdlEndpoint = config.property("endpoints.pdl").getString()
+    var token: String = ""
+
+    private suspend fun fetchPerson(ident: String, subjectToken: String?): Either<PDLClientError, HentPersonResponse> {
+        token = if (!subjectToken.isNullOrEmpty()) {
+            tokenProvider.tokenXTokenProvider(subjectToken)
+        } else {
+            tokenProvider.azureTokenProvider()
+        }
+
         return kotlin.runCatching {
-            httpClient.post(pdlKlientConfig.baseUrl) {
+            httpClient.post(pdlEndpoint) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
                 header("behandlingsnummer", "B470")
-                bearerAuth(getToken())
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(hentPersonQuery(ident))
             }.body<HentPersonResponse>()
@@ -64,16 +75,16 @@ class PDLClient(
             )
     }
 
-    suspend fun hentPerson(ident: String): Either<PDLClientError, Pair<Person, List<String>>> {
+    suspend fun hentPerson(ident: String, subjectToken: String?): Either<PDLClientError, Pair<Person, List<String>>> {
         return either {
-            val response = fetchPerson(ident).bind()
+            val response = fetchPerson(ident, subjectToken).bind()
             response.toPerson().bind()
         }
     }
 
     suspend fun hentPersonSomBarn(ident: String): Either<PDLClientError, BarnIFolkeregisteret> {
         return either {
-            val response = fetchPerson(ident).bind()
+            val response = fetchPerson(ident, null).bind()
             response.toBarn(ident).bind()
         }
     }

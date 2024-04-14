@@ -6,8 +6,8 @@ import no.nav.tiltakspenger.libs.person.Person
 
 class PDLService(private val pdlClient: PDLClient) {
 
-    suspend fun hentPerson(ident: String): Either<PDLClientError, Person> {
-        return pdlClient.hentPerson(ident).map { (person, barnsIdenter) ->
+    suspend fun hentPerson(ident: String, subjectToken: String?): Either<PDLClientError, Person> {
+        return pdlClient.hentPerson(ident, subjectToken).map { (person, barnsIdenter) ->
             person.copy(
                 barn = barnsIdenter.map { ident ->
                     pdlClient.hentPersonSomBarn(ident)

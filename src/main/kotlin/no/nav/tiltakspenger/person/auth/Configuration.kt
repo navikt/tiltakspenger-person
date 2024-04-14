@@ -9,7 +9,7 @@ import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import no.nav.tiltakspenger.person.pdl.PDLClient
 
-internal object Configuration {
+object Configuration {
 
     val rapidsAndRivers = mapOf(
         "RAPID_APP_NAME" to "tiltakspenger-person",

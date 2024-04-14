@@ -2,27 +2,22 @@ package no.nav.tiltakspenger.person.pdl
 
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.call
-import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
 import mu.KotlinLogging
 import no.nav.tiltakspenger.libs.person.Feilmelding
 import no.nav.tiltakspenger.libs.person.PersonRespons
+import no.nav.tiltakspenger.person.auth.getFnrForAzureToken
 
 private val LOG = KotlinLogging.logger {}
-const val pdlazurepath = "azure/pdl/personalia"
+const val PDL_PATH = "/azure/pdl/personalia"
 
-fun Route.PDLAzureRoutes(pdlService: PDLService) {
-    val securelog = KotlinLogging.logger("tjenestekall")
-    data class RequestBody(
-        val ident: String,
-    )
-
-    get(pdlazurepath) {
+fun Route.AzureRoutes(pdlService: PDLService) {
+    get(PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
-        val ident = call.receive<RequestBody>().ident
-        val pdlrespons = pdlService.hentPerson(ident)
+        val ident = call.getFnrForAzureToken() ?: throw IllegalStateException("Mangler fødselsnummer")
+        val pdlrespons = pdlService.hentPerson(ident, null)
 
         pdlrespons.fold(
             {
