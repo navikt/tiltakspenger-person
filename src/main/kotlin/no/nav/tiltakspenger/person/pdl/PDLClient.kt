@@ -19,7 +19,6 @@ import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
 import no.nav.tiltakspenger.libs.person.Person
 import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
 import no.nav.tiltakspenger.person.auth.TokenProvider
-import no.nav.tiltakspenger.person.auth.token
 import no.nav.tiltakspenger.person.httpClientCIO
 
 const val INDIVIDSTONAD = "IND"

@@ -11,10 +11,10 @@ import no.nav.tiltakspenger.libs.person.PersonRespons
 import no.nav.tiltakspenger.person.auth.getFnrForAzureToken
 
 private val LOG = KotlinLogging.logger {}
-const val PDL_PATH = "/azure/pdl/personalia"
+const val AZURE_PDL_PATH = "/azure/pdl/personalia"
 
 fun Route.AzureRoutes(pdlService: PDLService) {
-    get(PDL_PATH) {
+    get(AZURE_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.getFnrForAzureToken() ?: throw IllegalStateException("Mangler fødselsnummer")
         val pdlrespons = pdlService.hentPerson(ident, null)

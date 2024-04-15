@@ -12,10 +12,10 @@ import no.nav.tiltakspenger.person.auth.getFnrForTokenx
 import no.nav.tiltakspenger.person.auth.token
 
 private val LOG = KotlinLogging.logger {}
-const val pdltokenxpath = "tokenx/pdl/personalia"
+const val TOKENX_PDL_PATH = "tokenx/pdl/personalia"
 
 fun Route.TokenxRoutes(pdlService: PDLService) {
-    get(pdltokenxpath) {
+    get(TOKENX_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.getFnrForTokenx() ?: throw IllegalStateException("Mangler fødselsnummer")
         val pdlrespons = pdlService.hentPerson(ident = ident, subjectToken = call.token())

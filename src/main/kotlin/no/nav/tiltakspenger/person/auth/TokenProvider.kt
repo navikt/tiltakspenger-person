@@ -3,7 +3,6 @@ package no.nav.tiltakspenger.person.auth
 import io.ktor.server.config.ApplicationConfig
 import no.nav.tiltakspenger.person.httpClientCIO
 import no.nav.tiltakspenger.person.httpClientWithRetry
-import no.nav.tiltakspenger.soknad.api.auth.oauth.ClientConfig
 
 class TokenProvider(
     private val config: ApplicationConfig,

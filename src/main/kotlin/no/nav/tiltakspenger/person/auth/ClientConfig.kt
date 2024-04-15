@@ -1,4 +1,4 @@
-package no.nav.tiltakspenger.soknad.api.auth.oauth
+package no.nav.tiltakspenger.person.auth
 
 import com.nimbusds.oauth2.sdk.auth.ClientAuthenticationMethod
 import io.ktor.client.HttpClient
