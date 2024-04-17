@@ -14,12 +14,12 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.serialization.JsonConvertException
-import io.ktor.server.config.ApplicationConfig
 import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
 import no.nav.tiltakspenger.libs.person.Person
-import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
 import no.nav.tiltakspenger.person.auth.TokenProvider
+import no.nav.tiltakspenger.person.auth.TokenProvider.AzureAuthException
 import no.nav.tiltakspenger.person.httpClientCIO
+import no.nav.tiltakspenger.person.auth.Configuration as PersonConfiguration
 
 const val INDIVIDSTONAD = "IND"
 
@@ -44,22 +44,21 @@ fun Throwable.toPdlClientError() = when (this) {
 }
 
 class PDLClient(
-    private val config: ApplicationConfig,
     private val tokenProvider: TokenProvider,
     private val httpClient: HttpClient = httpClientCIO(),
+    private val pdlKlientConfig: PdlKlientConfig = PersonConfiguration.pdlKlientConfig(),
 ) {
-    private val pdlEndpoint = config.property("endpoints.pdl").getString()
     var token: String = ""
 
     private suspend fun fetchPerson(ident: String, subjectToken: String?): Either<PDLClientError, HentPersonResponse> {
         token = if (!subjectToken.isNullOrEmpty()) {
-            tokenProvider.tokenXTokenProvider(subjectToken)
+            tokenProvider.getTokenxToken(subjectToken)
         } else {
-            tokenProvider.azureTokenProvider()
+            tokenProvider.getAzureToken()
         }
 
         return kotlin.runCatching {
-            httpClient.post(pdlEndpoint) {
+            httpClient.post(pdlKlientConfig.baseUrl) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
                 header("behandlingsnummer", "B470")

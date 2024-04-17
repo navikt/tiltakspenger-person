@@ -7,7 +7,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
@@ -23,15 +22,6 @@ private const val SIXTY_SECONDS = 60L
 
 fun httpClientCIO() = HttpClient(CIO).medDefaultConfig()
 fun httpClientGeneric(engine: HttpClientEngine) = HttpClient(engine).medDefaultConfig()
-fun httpClientWithRetry() = httpClientCIO().also { httpClient ->
-    httpClient.config {
-        install(HttpRequestRetry) {
-            retryOnServerErrors(maxRetries = 3)
-            retryOnException(maxRetries = 3, retryOnTimeout = true)
-            constantDelay(100, 0, false)
-        }
-    }
-}
 
 private fun HttpClient.medDefaultConfig() = this.config {
     install(ContentNegotiation) {

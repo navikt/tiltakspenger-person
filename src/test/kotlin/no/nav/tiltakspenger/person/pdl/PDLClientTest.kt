@@ -13,9 +13,9 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.headersOf
-import io.ktor.server.config.ApplicationConfig
 import kotlinx.coroutines.runBlocking
 import no.nav.tiltakspenger.libs.person.Person
+import no.nav.tiltakspenger.person.auth.Configuration
 import no.nav.tiltakspenger.person.auth.TokenProvider
 import no.nav.tiltakspenger.person.httpClientGeneric
 import org.junit.jupiter.api.Test
@@ -28,10 +28,9 @@ class PDLClientTest {
     }
 
     private fun getPDLClient(response: String): PDLClient {
-        val config = ApplicationConfig("application.test.conf")
         return PDLClient(
-            config = config,
-            tokenProvider = TokenProvider(config),
+            pdlKlientConfig = Configuration.pdlKlientConfig(),
+            tokenProvider = TokenProvider(),
             httpClient = httpClientGeneric(mockEngine(response)),
         )
     }
@@ -48,7 +47,7 @@ class PDLClientTest {
     @Test
     fun `should be able to serialize non-errors`() {
         val response = this::class.java.getResource("/pdlResponse.json")?.readText()
-        val pdlClient = getPDLClient(response!!)
+        val pdlClient = getPDLClient(response.toString())
 
         runBlocking {
             pdlClient.hentPerson("test", "subjectToken")

@@ -38,14 +38,10 @@ fun main() {
         securelog.error(e) { e.message }
     }
 
-    // val tokenProvider = AzureTokenProvider()
     log.info { "Starting tiltakspenger-person" }
 
     // embeddedServer(Netty, port = httpPort(), module = Application::applicationModule).start(wait = true)
-    val applicationConfig = ApplicationConfig("application.conf")
-    val tokenProvider = TokenProvider(applicationConfig)
-
-    val pdlService = PDLService(pdlClient = PDLClient(applicationConfig, tokenProvider))
+    val pdlService = PDLService(pdlClient = PDLClient(TokenProvider()))
 
     RapidApplication.create(AuthConfiguration.rapidsAndRivers)
         .apply {
@@ -68,9 +64,7 @@ fun main() {
 }
 
 fun Application.applicationModule() {
-    val applicationConfig = ApplicationConfig("application.conf")
-    val tokenProvider = TokenProvider(applicationConfig)
-    val pdlClient = PDLClient(applicationConfig, tokenProvider)
+    val pdlClient = PDLClient(TokenProvider())
     val pdlService = PDLService(pdlClient)
 
     installJacksonFeature()
