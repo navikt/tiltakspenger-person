@@ -17,7 +17,7 @@ fun Route.AzureRoutes(pdlService: PDLService) {
     get(AZURE_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.getFnrForAzureToken() ?: throw IllegalStateException("Mangler fødselsnummer")
-        val pdlrespons = pdlService.hentPerson(ident, null)
+        val pdlrespons = pdlService.hentPersonMedAzure(ident)
 
         pdlrespons.fold(
             {

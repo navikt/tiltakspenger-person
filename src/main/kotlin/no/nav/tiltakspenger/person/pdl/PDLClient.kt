@@ -48,15 +48,7 @@ class PDLClient(
     private val httpClient: HttpClient = httpClientCIO(),
     private val pdlKlientConfig: PdlKlientConfig = PersonConfiguration.pdlKlientConfig(),
 ) {
-    var token: String = ""
-
-    private suspend fun fetchPerson(ident: String, subjectToken: String?): Either<PDLClientError, HentPersonResponse> {
-        token = if (!subjectToken.isNullOrEmpty()) {
-            tokenProvider.getTokenxToken(subjectToken)
-        } else {
-            tokenProvider.getAzureToken()
-        }
-
+    private suspend fun fetchPerson(ident: String, token: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {
             httpClient.post(pdlKlientConfig.baseUrl) {
                 accept(ContentType.Application.Json)
@@ -73,16 +65,23 @@ class PDLClient(
             )
     }
 
-    suspend fun hentPerson(ident: String, subjectToken: String?): Either<PDLClientError, Pair<Person, List<String>>> {
+    suspend fun hentPersonMedTokenx(ident: String, subjectToken: String): Either<PDLClientError, Pair<Person, List<String>>> {
         return either {
-            val response = fetchPerson(ident, subjectToken).bind()
+            val response = fetchPerson(ident, tokenProvider.getTokenxToken(subjectToken)).bind()
+            response.toPerson().bind()
+        }
+    }
+
+    suspend fun hentPersonMedAzure(ident: String): Either<PDLClientError, Pair<Person, List<String>>> {
+        return either {
+            val response = fetchPerson(ident, tokenProvider.getAzureToken()).bind()
             response.toPerson().bind()
         }
     }
 
     suspend fun hentPersonSomBarn(ident: String): Either<PDLClientError, BarnIFolkeregisteret> {
         return either {
-            val response = fetchPerson(ident, null).bind()
+            val response = fetchPerson(ident, tokenProvider.getAzureToken()).bind()
             response.toBarn(ident).bind()
         }
     }

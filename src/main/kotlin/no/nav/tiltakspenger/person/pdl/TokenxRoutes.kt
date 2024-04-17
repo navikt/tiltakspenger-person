@@ -18,7 +18,7 @@ fun Route.TokenxRoutes(pdlService: PDLService) {
     get(TOKENX_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.getFnrForTokenx() ?: throw IllegalStateException("Mangler fødselsnummer")
-        val pdlrespons = pdlService.hentPerson(ident = ident, subjectToken = call.token())
+        val pdlrespons = pdlService.hentPersonMedTokenx(ident = ident, subjectToken = call.token())
 
         pdlrespons.fold(
             {

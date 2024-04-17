@@ -46,8 +46,8 @@ class TokenProvider(
         }
     }
 
-    private suspend fun azureEndpointUrl(): String {
-        return httpClient.get(azureconfig.wellknownUrl).body<WellKnown>().tokenEndpoint
+    private suspend fun wellknown(): WellKnown {
+        return httpClient.get(azureconfig.wellknownUrl).body()
     }
 
     private suspend fun tokenxEndpointUrl(): String {
@@ -56,7 +56,7 @@ class TokenProvider(
 
     private suspend fun clientCredentials(): String {
         return httpClient.submitForm(
-            url = azureEndpointUrl(),
+            url = wellknown().tokenEndpoint,
             formParameters = Parameters.build {
                 append("grant_type", "client_credentials")
                 append("client_id", azureconfig.clientId)
@@ -83,7 +83,7 @@ class TokenProvider(
         val clientAssertion = ClientAssertion(URI.create(tokenxEndpointUrl()), clientAuthProperties)
 
         return httpClient.submitForm(
-            url = tokenxEndpointUrl(),
+            url = wellknown().tokenEndpoint,
             formParameters = Parameters.build {
                 append("grant_type", GrantType.TOKEN_EXCHANGE.value)
                 append("subject_token_type", SUBJECT_TOKEN_TYPE_VALUE)

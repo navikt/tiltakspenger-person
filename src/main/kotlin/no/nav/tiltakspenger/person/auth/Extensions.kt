@@ -17,6 +17,7 @@ fun ApplicationCall.getFnrForTokenx(): String? {
 fun ApplicationCall.getFnrForAzureToken(): String? {
     return this.getClaim("azure", "ident")
 }
+
 fun ApplicationCall.token(): String {
     return this.principal<TokenValidationContextPrincipal>().asTokenString()
 }

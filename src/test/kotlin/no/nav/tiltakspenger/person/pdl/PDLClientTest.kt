@@ -13,6 +13,7 @@ import io.ktor.client.engine.mock.respond
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.headersOf
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.tiltakspenger.libs.person.Person
 import no.nav.tiltakspenger.person.auth.Configuration
@@ -23,15 +24,12 @@ import java.time.LocalDate
 
 class PDLClientTest {
 
-    companion object {
-        const val accessToken = "woopwoop"
-    }
-
-    private fun getPDLClient(response: String): PDLClient {
+    val mockTokenProvider = mockk<TokenProvider>(relaxed = true)
+    private fun getPDLClient(response: String?): PDLClient {
         return PDLClient(
             pdlKlientConfig = Configuration.pdlKlientConfig(),
-            tokenProvider = TokenProvider(),
-            httpClient = httpClientGeneric(mockEngine(response)),
+            tokenProvider = mockTokenProvider,
+            httpClient = httpClientGeneric(mockEngine(response!!)),
         )
     }
 
@@ -50,17 +48,17 @@ class PDLClientTest {
         val pdlClient = getPDLClient(response.toString())
 
         runBlocking {
-            pdlClient.hentPerson("test", "subjectToken")
+            pdlClient.hentPersonMedTokenx("test", "subjectToken")
         }.shouldBeRight()
     }
 
     @Test
     fun `serialisering av barn med manglende ident`() {
-        val response = this::class.java.getResource("/pdlResponseManglendeIdentPåBarn.json").readText()
+        val response = this::class.java.getResource("/pdlResponseManglendeIdentPåBarn.json")?.readText()
         val pdlClient = getPDLClient(response)
 
         runBlocking {
-            val pair = pdlClient.hentPerson("test", null).getOrElse { }
+            val pair = pdlClient.hentPersonMedAzure("test").getOrElse { }
             pair should beInstanceOf<Pair<Person, List<String>>>()
             val person = (pair as Pair<Person, List<String>>).first
             val barnsIdenter = pair.second
@@ -76,11 +74,11 @@ class PDLClientTest {
 
     @Test
     fun `should be able to serialize errors`() {
-        val response = this::class.java.getResource("/pdlErrorResponse.json").readText()
+        val response = this::class.java.getResource("/pdlErrorResponse.json")?.readText()
         val pdlClient = getPDLClient(response)
 
         runBlocking {
-            pdlClient.hentPerson("test", null)
+            pdlClient.hentPersonMedAzure("test")
         }.shouldBeLeft()
     }
 
@@ -89,7 +87,7 @@ class PDLClientTest {
         val response = """{ "lol": "lal" }"""
         val pdlClient = getPDLClient(response)
         runBlocking {
-            pdlClient.hentPerson("test", null)
+            pdlClient.hentPersonMedAzure("test")
         }
             .mapLeft { it shouldBeSameInstanceAs PDLClientError.ResponsManglerPerson }
             .map { fail("Serialization of bad payload should result in an error") }
@@ -101,7 +99,7 @@ class PDLClientTest {
         val pdlClient = getPDLClient(response)
 
         runBlocking {
-            pdlClient.hentPerson("test", null)
+            pdlClient.hentPersonMedAzure("test")
         }
             .mapLeft { (it is PDLClientError.SerializationException) shouldBe true }
             .map { fail("Serialization of bad payload should result in an error") }
@@ -109,11 +107,11 @@ class PDLClientTest {
 
     @Test
     fun `should handle navn with null in folkeregisterdata`() {
-        val response = this::class.java.getResource("/pdlResponseManglerFolkeregisterdata.json").readText()
+        val response = this::class.java.getResource("/pdlResponseManglerFolkeregisterdata.json")?.readText()
         val pdlClient = getPDLClient(response)
 
         runBlocking {
-            pdlClient.hentPerson("test", null)
+            pdlClient.hentPersonMedAzure("test")
         }.shouldBeRight()
     }
 }
