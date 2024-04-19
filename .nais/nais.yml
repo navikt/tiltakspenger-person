@@ -30,10 +30,3 @@ spec:
     outbound:
       external:
         - host: {{ urlPdl }}
-  env:
-    - name: PDL_ENDPOINT_URL
-      value: { { endpoints.pdl } }
-    - name: PDL_AUDIENCE
-      value: { { audience.pdl } }
-    - name: PDL_SCOPE
-      value: { { scope.pdl } }
