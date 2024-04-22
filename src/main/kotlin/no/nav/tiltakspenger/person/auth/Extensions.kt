@@ -14,9 +14,6 @@ internal fun ApplicationCall.getClaim(issuer: String, name: String): String? =
 fun ApplicationCall.getFnrForTokenx(): String? {
     return this.getClaim("tokendings", "pid")
 }
-fun ApplicationCall.getFnrForAzureToken(): String? {
-    return this.getClaim("azure", "ident")
-}
 
 fun ApplicationCall.token(): String {
     return this.principal<TokenValidationContextPrincipal>().asTokenString()
