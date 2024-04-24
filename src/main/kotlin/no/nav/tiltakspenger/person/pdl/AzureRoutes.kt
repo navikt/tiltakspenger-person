@@ -20,7 +20,7 @@ data class RequestBody(
 fun Route.AzureRoutes(pdlService: PDLService) {
     get(AZURE_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
-        val ident = call.receive<RequestBody>().ident ?: throw IllegalStateException("Mangler fødselsnummer")
+        val ident = call.receive<RequestBody>().ident
         val pdlrespons = pdlService.hentPersonMedAzure(ident)
 
         pdlrespons.fold(

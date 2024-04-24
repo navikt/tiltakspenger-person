@@ -27,17 +27,21 @@ object Configuration {
         "AZURE_APP_CLIENT_ID" to System.getenv("AZURE_APP_CLIENT_ID"),
         "AZURE_APP_CLIENT_SECRET" to System.getenv("AZURE_APP_CLIENT_SECRET"),
         "AZURE_APP_WELL_KNOWN_URL" to System.getenv("AZURE_APP_WELL_KNOWN_URL"),
+        "logback.configurationFile" to "logback.xml",
     )
-    private val defaultProperties = ConfigurationMap(rapidsAndRivers + otherDefaultProperties)
+    private val defaultProperties = ConfigurationMap(otherDefaultProperties)
 
     private val localProperties = ConfigurationMap(
         mapOf(
             "application.profile" to Profile.LOCAL.toString(),
-            "PDL_SCOPE" to "api://dev-fss.pdl.pdl-api/.default",
-            "PDL_ENDPOINT_URL" to "https://pdl-api.dev-fss-pub.nais.io/graphql",
+            "PDL_SCOPE" to "api://localhost:8091/.default",
+            "PDL_ENDPOINT_URL" to "https://localhost:8091/graphql",
+            "logback.configurationFile" to "logback.local.xml",
             "AZURE_APP_CLIENT_ID" to "Azure_test_clientid",
             "AZURE_APP_CLIENT_SECRET" to "Azure_test_client_secret",
             "AZURE_APP_WELL_KNOWN_URL" to "http://localhost:8080/default/.well-known/openid-configuration",
+            "AZURE_OPENID_CONFIG_ISSUER" to "http://host.docker.internal:6969/azure",
+            "AZURE_OPENID_CONFIG_JWKS_URI" to "http://host.docker.internal:6969/azure/jwks",
             "TOKEN_X_CLIENT_ID" to "tokenx_clientid",
             "TOKEN_X_WELL_KNOWN_URL" to "http://localhost:8080/default/.well-known/openid-configuration",
             "TOKEN_X_PRIVATE_JWK" to "{\n" +
@@ -84,6 +88,8 @@ object Configuration {
             systemProperties() overriding EnvironmentVariables overriding localProperties overriding defaultProperties
         }
     }
+
+    fun logbackConfigurationFile() = config()[Key("logback.configurationFile", stringType)]
 
     fun httpPort() = config()[Key("application.httpPort", intType)]
 

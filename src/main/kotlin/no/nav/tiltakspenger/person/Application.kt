@@ -9,19 +9,20 @@ import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
 import io.ktor.server.auth.authenticate
 import io.ktor.server.config.ApplicationConfig
+import io.ktor.server.engine.embeddedServer
+import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.routing.routing
 import mu.KotlinLogging
-import no.nav.helse.rapids_rivers.RapidApplication
-import no.nav.helse.rapids_rivers.RapidsConnection
 import no.nav.security.token.support.v2.RequiredClaims
 import no.nav.security.token.support.v2.tokenValidationSupport
+import no.nav.tiltakspenger.person.auth.Configuration
+import no.nav.tiltakspenger.person.auth.Configuration.httpPort
 import no.nav.tiltakspenger.person.auth.TokenProvider
 import no.nav.tiltakspenger.person.pdl.AzureRoutes
 import no.nav.tiltakspenger.person.pdl.PDLClient
 import no.nav.tiltakspenger.person.pdl.PDLService
 import no.nav.tiltakspenger.person.pdl.TokenxRoutes
-import no.nav.tiltakspenger.person.auth.Configuration as AuthConfiguration
 
 enum class ISSUER(val value: String) {
     TOKENDINGS("tokendings"),
@@ -29,7 +30,7 @@ enum class ISSUER(val value: String) {
 }
 
 fun main() {
-    System.setProperty("logback.configurationFile", "egenLogback.xml")
+    System.setProperty("logback.configurationFile", Configuration.logbackConfigurationFile())
     val log = KotlinLogging.logger {}
     val securelog = KotlinLogging.logger("tjenestekall")
 
@@ -40,8 +41,8 @@ fun main() {
 
     log.info { "Starting tiltakspenger-person" }
 
-    // embeddedServer(Netty, port = httpPort(), module = Application::applicationModule).start(wait = true)
-    val pdlService = PDLService(pdlClient = PDLClient(TokenProvider()))
+    embeddedServer(Netty, port = httpPort(), module = Application::applicationModule).start(wait = true)
+    /*val pdlService = PDLService(pdlClient = PDLClient(TokenProvider()))
 
     RapidApplication.create(AuthConfiguration.rapidsAndRivers)
         .apply {
@@ -60,7 +61,7 @@ fun main() {
                     super.onShutdown(rapidsConnection)
                 }
             })
-        }.start()
+        }.start()*/
 }
 
 fun Application.applicationModule() {
