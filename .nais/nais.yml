@@ -30,3 +30,8 @@ spec:
     outbound:
       external:
         - host: {{ urlPdl }}
+    inbound:
+      rules:
+        - application: tiltakspenger-person-river
+          namespace: tpts
+          cluster: {{ cluster }}

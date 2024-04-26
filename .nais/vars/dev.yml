@@ -1,3 +1,4 @@
 kafka:
   pool: nav-dev
 urlPdl: pdl-api.dev-fss-pub.nais.io
+cluster: dev-gcp

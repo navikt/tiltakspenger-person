@@ -1,3 +1,4 @@
 kafka:
   pool: nav-prod
 urlPdl: pdl-api.prod-fss-pub.nais.io
+cluster: prod-gcp
