@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ name }}
+  name: tiltakspenger-person
   namespace: tpts
   labels:
     team: tpts
@@ -24,7 +24,14 @@ spec:
   azure:
     application:
       enabled: true
+  tokenx:
+    enabled: true
   accessPolicy:
     outbound:
       external:
         - host: {{ urlPdl }}
+    inbound:
+      rules:
+        - application: tiltakspenger-person-river
+          namespace: tpts
+          cluster: {{ cluster }}
