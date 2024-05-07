@@ -50,7 +50,7 @@ class PersonopplysningerService(
             ) {
                 val ident = packet["ident"].asText()
                 val respons: PersonRespons = runBlocking(MDCContext()) {
-                    pdlService.hentPerson(ident)
+                    pdlService.hentPersonMedAzure(ident)
                 }.map { person ->
                     PersonRespons(person = person)
                 }.getOrElse { håndterFeil(it) }

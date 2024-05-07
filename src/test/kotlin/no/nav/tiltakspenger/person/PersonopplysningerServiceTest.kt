@@ -48,7 +48,7 @@ class PersonopplysningerServiceTest {
             rapidsConnection = rapid,
             pdlService = pdlService,
         )
-        coEvery { pdlService.hentPerson(any()) } returns person.right()
+        coEvery { pdlService.hentPersonMedAzure(any()) } returns person.right()
         return Pair(rapid, pdlService)
     }
 
@@ -67,7 +67,7 @@ class PersonopplysningerServiceTest {
             }
             """.trimIndent(),
         )
-        coVerify { pdlClient.hentPerson(ident) }
+        coVerify { pdlClient.hentPersonMedAzure(ident) }
 
         println(rapid.inspektør.message(0).toString())
         // language=JSON
@@ -122,6 +122,6 @@ class PersonopplysningerServiceTest {
             }
             """.trimIndent(),
         )
-        coVerify { pdlClient.hentPerson(any()) wasNot Called }
+        coVerify { pdlClient.hentPersonMedAzure(any()) wasNot Called }
     }
 }

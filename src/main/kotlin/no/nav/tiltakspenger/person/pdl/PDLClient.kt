@@ -16,9 +16,10 @@ import io.ktor.http.contentType
 import io.ktor.serialization.JsonConvertException
 import no.nav.tiltakspenger.libs.person.BarnIFolkeregisteret
 import no.nav.tiltakspenger.libs.person.Person
-import no.nav.tiltakspenger.person.Configuration
-import no.nav.tiltakspenger.person.auth.AzureTokenProvider.AzureAuthException
+import no.nav.tiltakspenger.person.auth.TokenProvider
+import no.nav.tiltakspenger.person.auth.TokenProvider.AzureAuthException
 import no.nav.tiltakspenger.person.httpClientCIO
+import no.nav.tiltakspenger.person.auth.Configuration as PersonConfiguration
 
 const val INDIVIDSTONAD = "IND"
 
@@ -43,17 +44,17 @@ fun Throwable.toPdlClientError() = when (this) {
 }
 
 class PDLClient(
-    private val pdlKlientConfig: PdlKlientConfig = Configuration.pdlKlientConfig(),
-    private val getToken: suspend () -> String,
+    private val tokenProvider: TokenProvider,
     private val httpClient: HttpClient = httpClientCIO(),
+    private val pdlKlientConfig: PdlKlientConfig = PersonConfiguration.pdlKlientConfig(),
 ) {
-    private suspend fun fetchPerson(ident: String): Either<PDLClientError, HentPersonResponse> {
+    private suspend fun fetchPerson(ident: String, token: String): Either<PDLClientError, HentPersonResponse> {
         return kotlin.runCatching {
             httpClient.post(pdlKlientConfig.baseUrl) {
                 accept(ContentType.Application.Json)
                 header("Tema", INDIVIDSTONAD)
                 header("behandlingsnummer", "B470")
-                bearerAuth(getToken())
+                bearerAuth(token)
                 contentType(ContentType.Application.Json)
                 setBody(hentPersonQuery(ident))
             }.body<HentPersonResponse>()
@@ -64,16 +65,23 @@ class PDLClient(
             )
     }
 
-    suspend fun hentPerson(ident: String): Either<PDLClientError, Pair<Person, List<String>>> {
+    suspend fun hentPersonMedTokenx(ident: String, subjectToken: String): Either<PDLClientError, Pair<Person, List<String>>> {
         return either {
-            val response = fetchPerson(ident).bind()
+            val response = fetchPerson(ident, tokenProvider.getTokenxToken(subjectToken)).bind()
+            response.toPerson().bind()
+        }
+    }
+
+    suspend fun hentPersonMedAzure(ident: String): Either<PDLClientError, Pair<Person, List<String>>> {
+        return either {
+            val response = fetchPerson(ident, tokenProvider.getAzureToken()).bind()
             response.toPerson().bind()
         }
     }
 
     suspend fun hentPersonSomBarn(ident: String): Either<PDLClientError, BarnIFolkeregisteret> {
         return either {
-            val response = fetchPerson(ident).bind()
+            val response = fetchPerson(ident, tokenProvider.getAzureToken()).bind()
             response.toBarn(ident).bind()
         }
     }
