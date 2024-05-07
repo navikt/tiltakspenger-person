@@ -11,17 +11,6 @@ import no.nav.tiltakspenger.person.pdl.PDLClient
 
 object Configuration {
 
-    val rapidsAndRivers = mapOf(
-        "RAPID_APP_NAME" to "tiltakspenger-person",
-        "KAFKA_BROKERS" to System.getenv("KAFKA_BROKERS"),
-        "KAFKA_CREDSTORE_PASSWORD" to System.getenv("KAFKA_CREDSTORE_PASSWORD"),
-        "KAFKA_TRUSTSTORE_PATH" to System.getenv("KAFKA_TRUSTSTORE_PATH"),
-        "KAFKA_KEYSTORE_PATH" to System.getenv("KAFKA_KEYSTORE_PATH"),
-        "KAFKA_RAPID_TOPIC" to "tpts.rapid.v1",
-        "KAFKA_RESET_POLICY" to "latest",
-        "KAFKA_CONSUMER_GROUP_ID" to "tiltakspenger-person-v1",
-    )
-
     private val otherDefaultProperties = mapOf(
         "application.httpPort" to 8080.toString(),
         "AZURE_APP_CLIENT_ID" to System.getenv("AZURE_APP_CLIENT_ID"),
