@@ -27,4 +27,4 @@ Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på Git
 
 ## For NAV-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #tpts-tech.
+Interne henvendelser kan sendes via Slack i kanalen #tiltakspenger-værsågod.
