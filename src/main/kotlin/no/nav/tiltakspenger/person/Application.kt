@@ -77,6 +77,7 @@ fun Application.applicationModule() {
         authenticate(ISSUER.AZURE.value) {
             AzureRoutes(pdlService)
         }
+        healthRoutes()
     }
 }
 
