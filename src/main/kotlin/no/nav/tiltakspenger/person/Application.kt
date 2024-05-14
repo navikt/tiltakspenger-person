@@ -93,7 +93,9 @@ fun Application.applicationModule() {
         format { call ->
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
-            "Status: $status, HTTP method: $httpMethod"
+            val req = call.request
+            val userAgent = call.request.headers["User-Agent"]
+            "Status: $status, HTTP method: $httpMethod, User agent: $userAgent req: $req"
         }
     }
 }
