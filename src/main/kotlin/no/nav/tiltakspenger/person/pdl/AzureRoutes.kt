@@ -6,6 +6,7 @@ import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.get
+import io.ktor.server.routing.post
 import mu.KotlinLogging
 import no.nav.tiltakspenger.libs.person.Feilmelding
 import no.nav.tiltakspenger.libs.person.PersonRespons
@@ -19,10 +20,9 @@ data class RequestBody(
 )
 
 fun Route.AzureRoutes(pdlService: PDLService) {
-    get(AZURE_PDL_PATH) {
+    post(AZURE_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.receive<RequestBody>().ident
-        SECURELOG.info { "Mottatt call med ident: $ident" }
         val pdlrespons = pdlService.hentPersonMedAzure(ident)
 
         pdlrespons.fold(

@@ -1,11 +1,8 @@
 package no.nav.tiltakspenger.person
 
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import io.ktor.http.ContentType
-import io.ktor.serialization.jackson.JacksonConverter
 import io.ktor.serialization.jackson.jackson
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -14,11 +11,7 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.server.plugins.callid.callIdMdc
-import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.server.request.httpMethod
-import io.ktor.server.request.path
 import io.ktor.server.routing.routing
 import mu.KotlinLogging
 import no.nav.security.token.support.v2.RequiredClaims
@@ -86,21 +79,6 @@ fun Application.applicationModule() {
         }
         healthRoutes()
     }
-    install(CallLogging) {
-        callIdMdc("call-id")
-        disableDefaultColors()
-        filter { call ->
-            !call.request.path().startsWith("/isalive") &&
-                !call.request.path().startsWith("/isready")
-        }
-        format { call ->
-            val status = call.response.status()
-            val httpMethod = call.request.httpMethod.value
-            val req = call.request
-            val userAgent = call.request.headers["User-Agent"]
-            "Status: $status, HTTP method: $httpMethod, User agent: $userAgent req: $req"
-        }
-    }
 }
 
 fun Application.installAuthentication() {
@@ -129,12 +107,10 @@ fun Application.installAuthentication() {
 
 fun Application.installJacksonFeature() {
     install(ContentNegotiation) {
-        register(ContentType.Application.Json, JacksonConverter())
         jackson {
             configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false)
             registerModule(JavaTimeModule())
             registerModule(KotlinModule.Builder().build())
-            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         }
     }
 }
