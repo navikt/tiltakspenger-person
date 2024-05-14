@@ -11,6 +11,7 @@ import no.nav.tiltakspenger.libs.person.Feilmelding
 import no.nav.tiltakspenger.libs.person.PersonRespons
 
 private val LOG = KotlinLogging.logger {}
+private val SECURELOG = KotlinLogging.logger("tjenestekall")
 const val AZURE_PDL_PATH = "/azure/pdl/personalia"
 
 data class RequestBody(
@@ -21,6 +22,7 @@ fun Route.AzureRoutes(pdlService: PDLService) {
     get(AZURE_PDL_PATH) {
         LOG.info { "Mottatt forespørsel for å hente personalia data fra PDL" }
         val ident = call.receive<RequestBody>().ident
+        SECURELOG.info { "Mottatt call med ident: $ident" }
         val pdlrespons = pdlService.hentPersonMedAzure(ident)
 
         pdlrespons.fold(
