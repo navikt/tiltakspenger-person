@@ -11,7 +11,11 @@ import io.ktor.server.auth.authenticate
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.server.plugins.callid.callIdMdc
+import io.ktor.server.plugins.callloging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.request.httpMethod
+import io.ktor.server.request.path
 import io.ktor.server.routing.routing
 import mu.KotlinLogging
 import no.nav.security.token.support.v2.RequiredClaims
@@ -47,7 +51,7 @@ fun main() {
     RapidApplication.create(AuthConfiguration.rapidsAndRivers)
         .apply {
             PersonopplysningerService(
-                rapidsConnection = this,
+                arapidsConnection = this,
                 pdlService = pdlService,
             )
 
@@ -78,6 +82,19 @@ fun Application.applicationModule() {
             AzureRoutes(pdlService)
         }
         healthRoutes()
+    }
+    install(CallLogging) {
+        callIdMdc("call-id")
+        disableDefaultColors()
+        filter { call ->
+            !call.request.path().startsWith("/isalive") &&
+                !call.request.path().startsWith("/isready")
+        }
+        format { call ->
+            val status = call.response.status()
+            val httpMethod = call.request.httpMethod.value
+            "Status: $status, HTTP method: $httpMethod"
+        }
     }
 }
 
