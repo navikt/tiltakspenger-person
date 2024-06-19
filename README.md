@@ -13,7 +13,7 @@ En del av satsningen ["Flere i arbeid – P4"](https://memu.no/artikler/stor-sat
 For hvilke versjoner som brukes, [se byggefilen](build.gradle.kts)
 
 ## Bygging og denslags
-For å bygge artifaktene:
+Kjør følgende kommando i terminalen for å bygge artifaktene:
 
 ```sh
 ./gradlew build
