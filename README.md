@@ -1,3 +1,5 @@
+# Dette repo blir arkivert da vi gjør dette direkte i vedtak og soknad-api
+
 tiltakspenger-person
 ================
 Løser behov for tiltakspenger-vedtak.
